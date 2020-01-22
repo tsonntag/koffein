@@ -14,11 +14,7 @@ import Duration exposing (Duration)
 
 main =
   Browser.element
-    { init = init
-    , update = update
-    , subscriptions = subscriptions
-    , view = view
-    }
+    { init = init , update = update , subscriptions = subscriptions , view = view}
 
 
 type alias Model = { showAfter: Float
@@ -82,6 +78,9 @@ drawModel model = div []
                                       Just d -> d |> Duration.inMilliseconds |> String.fromFloat
                                       _ -> "-"
                                  )
+                          ]
+                  , p  [] [ text "Point: "
+                          , drawPointText model.point
                           ]
                   , p  [] [ text "Point: "
                           , drawPoint model.point

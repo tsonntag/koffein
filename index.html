@@ -5604,9 +5604,38 @@ var $author$project$React$Clicked = {$: 'Clicked'};
 var $author$project$React$CreateRandomModel = {$: 'CreateRandomModel'};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $author$project$Point$drawPoint = function (point) {
+	if (point.$ === 'Just') {
+		var p = point.a;
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					A2($elm$html$Html$Attributes$style, 'background', 'red'),
+					A2($elm$html$Html$Attributes$style, 'width', '10px'),
+					A2($elm$html$Html$Attributes$style, 'height', '10px'),
+					A2(
+					$elm$html$Html$Attributes$style,
+					'margin-left',
+					$elm$core$String$fromInt(p.x * 10) + 'px'),
+					A2(
+					$elm$html$Html$Attributes$style,
+					'margin-top',
+					$elm$core$String$fromInt(p.y * 10) + 'px')
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('')
+				]));
+	} else {
+		return A2($elm$html$Html$div, _List_Nil, _List_Nil);
+	}
+};
+var $author$project$Point$drawPointText = function (point) {
 	if (point.$ === 'Just') {
 		var p = point.a;
 		return A2(
@@ -5786,6 +5815,14 @@ var $author$project$React$drawModel = function (model) {
 								return '-';
 							}
 						}())
+					])),
+				A2(
+				$elm$html$Html$p,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Point: '),
+						$author$project$Point$drawPointText(model.point)
 					])),
 				A2(
 				$elm$html$Html$p,
