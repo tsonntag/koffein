@@ -5246,7 +5246,7 @@ var $author$project$React$CreateModel = function (a) {
 };
 var $author$project$React$newModel = F2(
 	function (showAfter, point) {
-		return {clicked: false, clickedAt: $elm$core$Maybe$Nothing, createdAt: $elm$core$Maybe$Nothing, now: $elm$core$Maybe$Nothing, point: point, showAfter: showAfter, timeZone: $elm$core$Maybe$Nothing};
+		return {clicked: false, clickedAt: $elm$core$Maybe$Nothing, createdAt: $elm$core$Maybe$Nothing, duration: $elm$core$Maybe$Nothing, now: $elm$core$Maybe$Nothing, point: point, showAfter: showAfter, timeZone: $elm$core$Maybe$Nothing};
 	});
 var $author$project$React$initialModel = A2($author$project$React$newModel, 0, $elm$core$Maybe$Nothing);
 var $elm$core$Debug$log = _Debug_log;
@@ -5481,6 +5481,32 @@ var $author$project$React$SetTimeZone = function (a) {
 	return {$: 'SetTimeZone', a: a};
 };
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $ianmackenzie$elm_units$Quantity$Quantity = function (a) {
+	return {$: 'Quantity', a: a};
+};
+var $ianmackenzie$elm_units$Duration$seconds = function (numSeconds) {
+	return $ianmackenzie$elm_units$Quantity$Quantity(numSeconds);
+};
+var $ianmackenzie$elm_units$Duration$milliseconds = function (numMilliseconds) {
+	return $ianmackenzie$elm_units$Duration$seconds(0.001 * numMilliseconds);
+};
+var $ianmackenzie$elm_units$Duration$from = F2(
+	function (startTime, endTime) {
+		var numMilliseconds = $elm$time$Time$posixToMillis(endTime) - $elm$time$Time$posixToMillis(startTime);
+		return $ianmackenzie$elm_units$Duration$milliseconds(numMilliseconds);
+	});
+var $author$project$React$duration = F2(
+	function (from, to) {
+		var _v0 = _Utils_Tuple2(from, to);
+		if (_v0.a.$ === 'Just') {
+			var f = _v0.a.a;
+			var t = _v0.b;
+			return $elm$core$Maybe$Just(
+				A2($ianmackenzie$elm_units$Duration$from, f, t));
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
 var $author$project$React$getTime = function (msg) {
 	return A2(
 		$elm$core$Task$perform,
@@ -5534,6 +5560,7 @@ var $author$project$React$update = F2(
 							model,
 							{
 								clickedAt: $elm$core$Maybe$Just(time),
+								duration: A2($author$project$React$duration, model.createdAt, time),
 								now: $elm$core$Maybe$Just(time)
 							})),
 					$elm$core$Platform$Cmd$none);
@@ -5600,6 +5627,13 @@ var $author$project$Point$drawPoint = function (point) {
 };
 var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $ianmackenzie$elm_units$Duration$inSeconds = function (_v0) {
+	var numSeconds = _v0.a;
+	return numSeconds;
+};
+var $ianmackenzie$elm_units$Duration$inMilliseconds = function (duration) {
+	return $ianmackenzie$elm_units$Duration$inSeconds(duration) * 1000;
+};
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$time$Time$flooredDiv = F2(
 	function (numerator, denominator) {
@@ -5683,7 +5717,7 @@ var $author$project$TimeStamp$toString = F2(
 				A2($elm$time$Time$toHour, z, t));
 			return hour + (':' + (minute + (':' + second)));
 		} else {
-			return 'ASDASD';
+			return '-';
 		}
 	});
 var $author$project$React$drawModel = function (model) {
@@ -5734,6 +5768,24 @@ var $author$project$React$drawModel = function (model) {
 						$elm$html$Html$text('Clicked: '),
 						$elm$html$Html$text(
 						A2($author$project$TimeStamp$toString, model.timeZone, model.clickedAt))
+					])),
+				A2(
+				$elm$html$Html$p,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Duration: '),
+						$elm$html$Html$text(
+						function () {
+							var _v0 = model.duration;
+							if (_v0.$ === 'Just') {
+								var d = _v0.a;
+								return $elm$core$String$fromFloat(
+									$ianmackenzie$elm_units$Duration$inMilliseconds(d));
+							} else {
+								return '-';
+							}
+						}())
 					])),
 				A2(
 				$elm$html$Html$p,

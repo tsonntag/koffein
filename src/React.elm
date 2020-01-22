@@ -9,6 +9,7 @@ import Time exposing (..)
 import TimeStamp exposing (..)
 import Point exposing (..)
 import Debug exposing (log)
+import Duration exposing (Duration)
 
 
 main =
@@ -27,6 +28,7 @@ type alias Model = { showAfter: Float
                    , now:       Maybe Time.Posix
                    , point:     Maybe Point
                    , timeZone:  Maybe Time.Zone
+                   , duration:  Maybe Duration
                    }
 
 
@@ -39,6 +41,7 @@ newModel showAfter point =
     , point = point
     , now = Nothing
     , timeZone = Nothing
+    , duration = Nothing
     }
 
 initialModel : Model
@@ -74,6 +77,12 @@ drawModel model = div []
                   , p  [] [ text "Clicked: "
                           , text (TimeStamp.toString model.timeZone model.clickedAt)
                           ]
+                  , p  [] [ text "Duration: "
+                          , text (case model.duration of
+                                      Just d -> d |> Duration.inMilliseconds |> String.fromFloat
+                                      _ -> "-"
+                                 )
+                          ]
                   , p  [] [ text "Point: "
                           , drawPoint model.point
                           ]
@@ -85,6 +94,14 @@ nowCmd = Task.perform SetNow Time.now
 getTime : (Time.Posix -> Msg) -> Cmd Msg
 getTime msg =
     Task.perform (log "GET TIME" msg) Time.now
+
+duration : Maybe Time.Posix -> Time.Posix -> Maybe Duration
+duration from to =
+    case (from, to) of
+        (Just f, t) ->
+            Just (Duration.from f t)
+        _ ->
+            Nothing
 
 
 type Msg
@@ -129,7 +146,7 @@ update msg model =
 
 
     SetClickedAt time ->
-        ({ model | clickedAt = Just time, now = Just time  }
+        ({ model | clickedAt = Just time , now = Just time, duration = duration model.createdAt time  }
              |> log "SET CLICKED AT"
         , Cmd.none
         )

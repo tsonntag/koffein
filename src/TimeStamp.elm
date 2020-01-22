@@ -5,7 +5,7 @@ import Time exposing (Zone, Posix)
 
 toString : Maybe Zone -> Maybe Posix -> String
 toString zone  time =
-    case (zone |> log "ZONE", time |> log "TIME") of
+    case ( zone, time ) of
         (Just z, Just t) ->
             let
                 hour   = String.fromInt (Time.toHour   z t)
