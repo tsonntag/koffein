@@ -15,26 +15,58 @@ main =
     }
 
 
-type alias Model = { showMsecs : Int, clicked : Bool,  clickedMsecs: Int }
+type alias Point = { x: Int, y: Int, visible: Bool }
+type alias Model = { showTime : Int, clicked : Bool,  clickedTime: Int, point: Maybe Point }
 
-initialModel : Int -> Model
-initialModel showMsecs =
-    { showMsecs = showMsecs
+newModel : Int -> Maybe Point -> Model
+newModel showTime point =
+    { showTime = showTime
     , clicked = False
-    , clickedMsecs = 0
+    , clickedTime = 0
+    , point = point
     }
 
+initialModel : Model
+initialModel  = newModel 0 Nothing
+       
+
+newPoint : Int -> Int -> Point
+newPoint x y =
+    { x = x, y = y, visible = True}
+
+drawPoint : Point -> Html Msg 
+drawPoint point =
+    div [] [ text (String.fromInt point.x)
+           , text (String.fromInt point.y)
+           ]
+
+randomPoint =
+    Random.pair (Random.int 0 10) (Random.int 0 20)
+
+randomTime =
+    Random.int 1 10
+
+randomModel =
+    Random.pair randomTime randomPoint
+
+
+drawModel : Model -> Html Msg
+drawModel model =
+    case model.point of
+        Just point ->
+            drawPoint point 
+        Nothing -> div [] []
 
 init : () -> (Model, Cmd Msg)
 init _ =
-  ( initialModel(0)
+  ( initialModel
   , Cmd.none
   )
 
 
 type Msg
   = Start
-  | NewMsecs Int
+  | NewModel (Int, (Int, Int))
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -42,13 +74,13 @@ update msg model =
   case msg of
     Start ->
       ( model
-      , Random.generate NewMsecs (Random.int 10 200)
+      , Random.generate NewModel randomModel
       )
 
-    NewMsecs msecs ->
-      ( initialModel(msecs) 
-      , Cmd.none
-      )
+    NewModel (time, ( x, y)) ->
+        ( newModel time  (Just (newPoint x y))
+        , Cmd.none
+        )
 
 
 subscriptions : Model -> Sub Msg
@@ -59,8 +91,10 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
   div []
-    [ h1 [] [ text (String.fromInt  model.showMsecs) ]
+    [ h1 [] [ text (String.fromInt  model.showTime) ]
     -- , h1 [] [ text (model.clicked)]
-    , h1 [] [ text (String.fromInt  model.clickedMsecs)]
+    , h1 [] [ text (String.fromInt  model.clickedTime) ]
+    , drawModel(model)
     , button [ onClick Start ] [ text "Start" ]
     ]
+
