@@ -4372,43 +4372,6 @@ function _Browser_load(url)
 
 
 
-var _Bitwise_and = F2(function(a, b)
-{
-	return a & b;
-});
-
-var _Bitwise_or = F2(function(a, b)
-{
-	return a | b;
-});
-
-var _Bitwise_xor = F2(function(a, b)
-{
-	return a ^ b;
-});
-
-function _Bitwise_complement(a)
-{
-	return ~a;
-};
-
-var _Bitwise_shiftLeftBy = F2(function(offset, a)
-{
-	return a << offset;
-});
-
-var _Bitwise_shiftRightBy = F2(function(offset, a)
-{
-	return a >> offset;
-});
-
-var _Bitwise_shiftRightZfBy = F2(function(offset, a)
-{
-	return a >>> offset;
-});
-
-
-
 function _Time_now(millisToPosix)
 {
 	return _Scheduler_binding(function(callback)
@@ -4452,6 +4415,43 @@ function _Time_getZoneName()
 		callback(_Scheduler_succeed(name));
 	});
 }
+
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
@@ -5241,7 +5241,8 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$React$initialModel = {clickedAt: $elm$core$Maybe$Nothing, point: $elm$core$Maybe$Nothing, show: false, showAfter: $elm$core$Maybe$Nothing, startedAt: $elm$core$Maybe$Nothing};
+var $author$project$React$initialRound = {clickedAt: $elm$core$Maybe$Nothing, point: $elm$core$Maybe$Nothing, show: false, showAfter: $elm$core$Maybe$Nothing, startedAt: $elm$core$Maybe$Nothing};
+var $author$project$React$initialModel = {avg: $elm$core$Maybe$Nothing, current: $author$project$React$initialRound, maxRounds: 0, rounds: _List_Nil};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$React$init = function (_v0) {
@@ -5259,15 +5260,6 @@ var $author$project$Point$Point = F2(
 var $author$project$React$SetClickedAt = function (a) {
 	return {$: 'SetClickedAt', a: a};
 };
-var $author$project$React$SetPoint = function (a) {
-	return {$: 'SetPoint', a: a};
-};
-var $author$project$React$SetShowAfter = function (a) {
-	return {$: 'SetShowAfter', a: a};
-};
-var $author$project$React$SetStartedAt = function (a) {
-	return {$: 'SetStartedAt', a: a};
-};
 var $author$project$React$ShowPoint = {$: 'ShowPoint'};
 var $elm$core$Basics$always = F2(
 	function (a, _v0) {
@@ -5281,6 +5273,35 @@ var $author$project$React$after = F2(
 			$elm$core$Basics$always(msg),
 			$elm$core$Process$sleep(time));
 	});
+var $elm$time$Time$Name = function (a) {
+	return {$: 'Name', a: a};
+};
+var $elm$time$Time$Offset = function (a) {
+	return {$: 'Offset', a: a};
+};
+var $elm$time$Time$Zone = F2(
+	function (a, b) {
+		return {$: 'Zone', a: a, b: b};
+	});
+var $elm$time$Time$customZone = $elm$time$Time$Zone;
+var $elm$time$Time$Posix = function (a) {
+	return {$: 'Posix', a: a};
+};
+var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
+var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
+var $elm$time$Time$posixToMillis = function (_v0) {
+	var millis = _v0.a;
+	return millis;
+};
+var $author$project$React$SetPoint = function (a) {
+	return {$: 'SetPoint', a: a};
+};
+var $author$project$React$SetShowAfter = function (a) {
+	return {$: 'SetShowAfter', a: a};
+};
+var $author$project$React$SetStartedAt = function (a) {
+	return {$: 'SetStartedAt', a: a};
+};
 var $elm$random$Random$Generate = function (a) {
 	return {$: 'Generate', a: a};
 };
@@ -5302,26 +5323,6 @@ var $elm$random$Random$initialSeed = function (x) {
 	var state2 = (state1 + x) >>> 0;
 	return $elm$random$Random$next(
 		A2($elm$random$Random$Seed, state2, incr));
-};
-var $elm$time$Time$Name = function (a) {
-	return {$: 'Name', a: a};
-};
-var $elm$time$Time$Offset = function (a) {
-	return {$: 'Offset', a: a};
-};
-var $elm$time$Time$Zone = F2(
-	function (a, b) {
-		return {$: 'Zone', a: a, b: b};
-	});
-var $elm$time$Time$customZone = $elm$time$Time$Zone;
-var $elm$time$Time$Posix = function (a) {
-	return {$: 'Posix', a: a};
-};
-var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
-var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
-var $elm$time$Time$posixToMillis = function (_v0) {
-	var millis = _v0.a;
-	return millis;
 };
 var $elm$random$Random$init = A2(
 	$elm$core$Task$andThen,
@@ -5458,55 +5459,98 @@ var $elm$random$Random$pair = F2(
 			genA,
 			genB);
 	});
+var $author$project$React$startCmd = $elm$core$Platform$Cmd$batch(
+	_List_fromArray(
+		[
+			A2($elm$core$Task$perform, $author$project$React$SetStartedAt, $elm$time$Time$now),
+			A2(
+			$elm$random$Random$generate,
+			$author$project$React$SetPoint,
+			A2(
+				$elm$random$Random$pair,
+				A2($elm$random$Random$int, 0, 10),
+				A2($elm$random$Random$int, 0, 20))),
+			A2(
+			$elm$random$Random$generate,
+			$author$project$React$SetShowAfter,
+			A2($elm$random$Random$int, 1000, 5000))
+		]));
+var $author$project$React$updateCurrent = F2(
+	function (model, f) {
+		return _Utils_update(
+			model,
+			{
+				current: f(model.current)
+			});
+	});
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
 var $author$project$React$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
-			case 'Start':
-				return _Utils_Tuple2(
-					$author$project$React$initialModel,
-					$elm$core$Platform$Cmd$batch(
-						_List_fromArray(
-							[
-								A2($elm$core$Task$perform, $author$project$React$SetStartedAt, $elm$time$Time$now),
-								A2(
-								$elm$random$Random$generate,
-								$author$project$React$SetPoint,
-								A2(
-									$elm$random$Random$pair,
-									A2($elm$random$Random$int, 0, 10),
-									A2($elm$random$Random$int, 0, 20))),
-								A2(
-								$elm$random$Random$generate,
-								$author$project$React$SetShowAfter,
-								A2($elm$random$Random$int, 1000, 5000))
-							])));
-			case 'SetShowAfter':
-				var showAfter = msg.a;
+			case 'SetMaxRounds':
+				var ns = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							showAfter: $elm$core$Maybe$Just(showAfter)
+							maxRounds: A2(
+								$elm$core$Maybe$withDefault,
+								0,
+								$elm$core$String$toInt(ns))
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'Start':
+				return _Utils_Tuple2($author$project$React$initialModel, $author$project$React$startCmd);
+			case 'SetShowAfter':
+				var showAfter = msg.a;
+				return _Utils_Tuple2(
+					A2(
+						$author$project$React$updateCurrent,
+						model,
+						function (r) {
+							return _Utils_update(
+								r,
+								{
+									showAfter: $elm$core$Maybe$Just(showAfter)
+								});
 						}),
 					A2($author$project$React$after, showAfter, $author$project$React$ShowPoint));
 			case 'SetClickedAt':
 				var time = msg.a;
 				return _Utils_Tuple2(
-					_Utils_update(
+					A2(
+						$author$project$React$updateCurrent,
 						model,
-						{
-							clickedAt: $elm$core$Maybe$Just(
-								$elm$time$Time$posixToMillis(time))
+						function (r) {
+							return _Utils_update(
+								r,
+								{
+									clickedAt: $elm$core$Maybe$Just(
+										$elm$time$Time$posixToMillis(time))
+								});
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'SetStartedAt':
 				var time = msg.a;
 				return _Utils_Tuple2(
-					_Utils_update(
+					A2(
+						$author$project$React$updateCurrent,
 						model,
-						{
-							startedAt: $elm$core$Maybe$Just(
-								$elm$time$Time$posixToMillis(time))
+						function (r) {
+							return _Utils_update(
+								r,
+								{
+									startedAt: $elm$core$Maybe$Just(
+										$elm$time$Time$posixToMillis(time))
+								});
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'SetPoint':
@@ -5514,18 +5558,28 @@ var $author$project$React$update = F2(
 				var x = _v1.a;
 				var y = _v1.b;
 				return _Utils_Tuple2(
-					_Utils_update(
+					A2(
+						$author$project$React$updateCurrent,
 						model,
-						{
-							point: $elm$core$Maybe$Just(
-								A2($author$project$Point$Point, x, y))
+						function (r) {
+							return _Utils_update(
+								r,
+								{
+									point: $elm$core$Maybe$Just(
+										A2($author$project$Point$Point, x, y))
+								});
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'ShowPoint':
 				return _Utils_Tuple2(
-					_Utils_update(
+					A2(
+						$author$project$React$updateCurrent,
 						model,
-						{show: true}),
+						function (r) {
+							return _Utils_update(
+								r,
+								{show: true});
+						}),
 					$elm$core$Platform$Cmd$none);
 			default:
 				var _v2 = msg.a;
@@ -5534,6 +5588,9 @@ var $author$project$React$update = F2(
 					A2($elm$core$Task$perform, $author$project$React$SetClickedAt, $elm$time$Time$now));
 		}
 	});
+var $author$project$React$SetMaxRounds = function (a) {
+	return {$: 'SetMaxRounds', a: a};
+};
 var $author$project$React$Start = {$: 'Start'};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$div = _VirtualDom_node('div');
@@ -5548,15 +5605,6 @@ var $elm$core$Maybe$map = F2(
 				f(value));
 		} else {
 			return $elm$core$Maybe$Nothing;
-		}
-	});
-var $elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
 		}
 	});
 var $author$project$React$drawInt = function (_int) {
@@ -5615,24 +5663,44 @@ var $author$project$Point$drawPoint = function (_v0) {
 				$elm$html$Html$text('')
 			]));
 };
+var $elm$core$Maybe$map3 = F4(
+	function (func, ma, mb, mc) {
+		if (ma.$ === 'Nothing') {
+			return $elm$core$Maybe$Nothing;
+		} else {
+			var a = ma.a;
+			if (mb.$ === 'Nothing') {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				var b = mb.a;
+				if (mc.$ === 'Nothing') {
+					return $elm$core$Maybe$Nothing;
+				} else {
+					var c = mc.a;
+					return $elm$core$Maybe$Just(
+						A3(func, a, b, c));
+				}
+			}
+		}
+	});
 var $author$project$React$duration = function (_v0) {
 	var clickedAt = _v0.clickedAt;
 	var startedAt = _v0.startedAt;
 	var showAfter = _v0.showAfter;
-	var _v1 = _Utils_Tuple3(clickedAt, startedAt, showAfter);
-	if (((_v1.a.$ === 'Just') && (_v1.b.$ === 'Just')) && (_v1.c.$ === 'Just')) {
-		var a = _v1.a.a;
-		var b = _v1.b.a;
-		var c = _v1.c.a;
-		return $elm$core$Maybe$Just((a - b) - c);
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
+	return A4(
+		$elm$core$Maybe$map3,
+		F3(
+			function (a, b, c) {
+				return (a - b) - c;
+			}),
+		clickedAt,
+		startedAt,
+		showAfter);
 };
 var $elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
 var $elm$html$Html$map = $elm$virtual_dom$VirtualDom$map;
 var $elm$html$Html$p = _VirtualDom_node('p');
-var $author$project$React$drawModel = function (model) {
+var $author$project$React$drawRound = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
@@ -5695,12 +5763,65 @@ var $author$project$React$drawModel = function (model) {
 					]))
 			]));
 };
+var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 'MayStopPropagation', a: a};
+};
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
+};
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$React$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
 		_List_fromArray(
 			[
+				A2(
+				$elm$html$Html$input,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$type_('number'),
+						$elm$html$Html$Attributes$value('0'),
+						$elm$html$Html$Events$onInput($author$project$React$SetMaxRounds)
+					]),
+				_List_Nil),
 				A2(
 				$elm$html$Html$button,
 				_List_fromArray(
@@ -5711,7 +5832,7 @@ var $author$project$React$view = function (model) {
 					[
 						$elm$html$Html$text('Start')
 					])),
-				$author$project$React$drawModel(model)
+				$author$project$React$drawRound(model.current)
 			]));
 };
 var $author$project$React$main = $elm$browser$Browser$element(
