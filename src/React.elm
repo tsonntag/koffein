@@ -4,12 +4,12 @@ import Browser
 import Html exposing (..)
 import Html.Events exposing (..)
 import Random
+import Process
 import Task
 import Time exposing (..)
-import TimeStamp exposing (..)
 import Point exposing (..)
 import Debug exposing (log)
-import Duration exposing (Duration)
+import Utils exposing (boolToString)
 
 
 main =
@@ -17,165 +17,123 @@ main =
     { init = init , update = update , subscriptions = subscriptions , view = view}
 
 
-type alias Model = { showAfter: Float
-                   , createdAt: Maybe Time.Posix
-                   , clickedAt: Maybe Time.Posix
-                   , clicked:   Bool
-                   , now:       Maybe Time.Posix
+type alias Model = { showAfter: Maybe Int
+                   , startedAt: Maybe Int
+                   , clickedAt: Maybe Int
                    , point:     Maybe Point
-                   , timeZone:  Maybe Time.Zone
-                   , duration:  Maybe Duration
+                   , show:      Bool
                    }
 
 
-newModel : Float -> Maybe Point -> Model
-newModel showAfter point =
-    { showAfter = showAfter
-    , clicked = False
-    , createdAt = Nothing
+initialModel : Model
+initialModel =
+    { showAfter = Nothing
+    , startedAt = Nothing
     , clickedAt = Nothing
-    , point = point
-    , now = Nothing
-    , timeZone = Nothing
-    , duration = Nothing
+    , point     = Nothing
+    , show      = False
     }
 
-initialModel : Model
-initialModel  = newModel 0 Nothing
 
-randomModelCmd : ((Float, (Int, Int)) -> Msg) -> Cmd Msg
-randomModelCmd msg =
-    let
-        point =
-            Random.pair (Random.int 0 10) (Random.int 0 20)
 
-        showAfter =
-            Random.float 500 2000
-    in
-        Random.generate (log "RANDOM MODEL CMD" msg) (Random.pair showAfter point)
+drawInt : Maybe Int -> String
+drawInt int = int |> Maybe.map String.fromInt |> Maybe.withDefault ""
 
-boolToString : Bool -> String
-boolToString   bool =
-               if bool then "true" else "false"
 
 drawModel : Model -> Html Msg
-drawModel model = div []
-                  [ h1 [] [ text "Model" ]
-                  , p  [] [ text "Now: "
-                          , text (TimeStamp.toString model.timeZone model.now)
-                          ]
-                  , p  [] [ text "Point show after: "
-                          , text (String.fromFloat  model.showAfter)
-                          ]
-                  , p  [] [ text "Created: "
-                          , text (TimeStamp.toString model.timeZone model.createdAt)
-                          ]
-                  , p  [] [ text "Clicked: "
-                          , text (TimeStamp.toString model.timeZone model.clickedAt)
-                          ]
-                  , p  [] [ text "Duration: "
-                          , text (case model.duration of
-                                      Just d -> d |> Duration.inMilliseconds |> String.fromFloat
-                                      _ -> "-"
-                                 )
-                          ]
-                  , p  [] [ text "Point: "
-                          , drawPointText model.point
-                          ]
-                  , p  [] [ text "Point: "
-                          , drawPoint model.point
-                          ]
-                  ]
+drawModel model
+            = div []
+              [ p  [] [ text "Point show after: "
+                      , text <| drawInt model.showAfter
+                      ]
+              , p  [] [ text "Started: "
+                      , text <| drawInt model.startedAt
+                      ]
+              , p  [] [ text "Clicked: "
+                      , text <| drawInt model.clickedAt
+                      ]
+              , p  [] [ text "Duration: "
+                      , text <| drawInt (duration model)
+                      ]
+              -- , p  [] [ text "Point: "
+              --         , drawPointText model.point
+              --      ]
+              , div  [] [ case (model.show, model.point) of
+                              (True, Just p) -> Html.map PointMsg (drawPoint p)
+                              _ -> text ""
+                        ]
+              ]
+
+duration : Model -> Maybe Int
+duration  { clickedAt, startedAt, showAfter } =
+    case (clickedAt, startedAt, showAfter) of
+        (Just a, Just b, Just c) ->
+            Just (a - b - c)
+        _ -> Nothing
 
 
-nowCmd = Task.perform SetNow Time.now
 
-getTime : (Time.Posix -> Msg) -> Cmd Msg
-getTime msg =
-    Task.perform (log "GET TIME" msg) Time.now
-
-duration : Maybe Time.Posix -> Time.Posix -> Maybe Duration
-duration from to =
-    case (from, to) of
-        (Just f, t) ->
-            Just (Duration.from f t)
-        _ ->
-            Nothing
-
+after : Int -> Msg -> Cmd Msg
+after time msg =
+    Process.sleep (toFloat time) |> Task.perform (always msg)
 
 type Msg
-  = CreateRandomModel
-  | Clicked
+  = Start
+  | ShowPoint
   | SetClickedAt  Time.Posix
-  | SetCreatedAt  Time.Posix
-  | SetNow        Time.Posix
-  | SetTimeZone   Time.Zone
-  | CreateModel (Float, (Int, Int))
+  | SetStartedAt  Time.Posix
+  | SetShowAfter  Int
+  | SetPoint      (Int, Int)
+  | PointMsg      Point.Msg
 
 
 init : () -> (Model, Cmd Msg)
-init _ =
-  ( initialModel |> log "INIT INITIAL MODEL"
-  , randomModelCmd CreateModel |> log "INIT RANDOM"
-  )
+init _ = ( initialModel, Cmd.none )
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    CreateRandomModel ->
-      ( model
-      , randomModelCmd CreateModel
-      )
-
-    Clicked ->
-        ({ model | clicked = True }
-        , getTime SetClickedAt
+    Start ->
+        ( initialModel
+        , Cmd.batch
+              [ Task.perform    SetStartedAt Time.now
+              , Random.generate SetPoint     (Random.pair (Random.int 0 10) (Random.int 0 20))
+              , Random.generate SetShowAfter (Random.int 1000 5000)
+              ]
         )
 
-    SetNow time ->
-        ({ model | now = Just time }
-        , Cmd.none
-        )
-
-    SetTimeZone zone ->
-        ({ model | timeZone = Just zone }
-        , Cmd.none
-        )
-
+    SetShowAfter showAfter ->
+        ( { model | showAfter = Just showAfter }
+        , after showAfter ShowPoint )
 
     SetClickedAt time ->
-        ({ model | clickedAt = Just time , now = Just time, duration = duration model.createdAt time  }
-             |> log "SET CLICKED AT"
-        , Cmd.none
-        )
+        ({ model | clickedAt = Just <| Time.posixToMillis time }
+        , Cmd.none )
 
-    SetCreatedAt time ->
-        ({ model | createdAt = Just time, now = Just time }
-             |> log "SET CREATED AT"
+    SetStartedAt time ->
+        ( { model | startedAt = Just <| Time.posixToMillis time },
+              Cmd.none)
 
-        , Cmd.none
-        )
+    SetPoint (x, y) ->
+        ( { model | point = Just (Point x y) }, Cmd.none )
 
-    CreateModel (showAfter, (x, y)) ->
-        ( newModel showAfter (Just (newPoint x y))
-             |> log "SET CREATED AT"
-        , Cmd.batch
-              [ getTime SetCreatedAt
-              , Task.perform SetTimeZone Time.here]
-        )
+    ShowPoint ->
+        ( { model | show = True }, Cmd.none )
+
+
+    PointMsg Point.Clicked ->
+        ( model , Task.perform SetClickedAt Time.now)
+
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
-  Sub.none
+subscriptions model = Sub.none
 
 
 view : Model -> Html Msg
 view model =
   div []
-      [ drawModel(model)
-      , button [ onClick CreateRandomModel  ] [ text "Create" ]
-      , button [ onClick Clicked ] [ text "Click" ]
+      [ button [ onClick Start ]   [ text "Start" ]
+      , drawModel(model)
       ]
-
