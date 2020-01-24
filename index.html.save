@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Koffein</title>
+  <script src="hermes/elm/elm.js"></script>
+  <script>
+   var app = Elm.React.init({
+       node: document.getElementById("elm")
+   });
+  </script>
+  <div id="elm"></div>
+</head>
+
+<body>
+

@@ -24,9 +24,9 @@ px x = (String.fromInt (x * 10)) ++ "px"
 drawPoint : Point -> Html Msg
 drawPoint { x, y } =
     button [ onClick Clicked
-           , style "background" "red"
-           , style "width" "10px"
-           , style "height" "10px"
+           , class "btn btn-danger"
+           , style "width"  "20px"
+           , style "height" "20px"
            , style "margin-left" (px x)
            , style "margin-top"  (px y)
            ]
