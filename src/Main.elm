@@ -21,11 +21,11 @@ main =
 type alias Model = { showAfter: Maybe Int
                    , startedAt: Maybe Int
                    , clickedAt: Maybe Int
+                   , duration:  Maybe Int
                    , point:     Maybe Point
                    , showPoint: Bool
-                   , maxRounds: Int
-                   , round:     Int
-                   , rounds:    List ( Int, Int )
+                   , game:      Int
+                   , durations: List Int
                    , avg:       Maybe Int
                    }
 
@@ -34,22 +34,20 @@ initialModel =
     { showAfter = Nothing
     , startedAt = Nothing
     , clickedAt = Nothing
+    , duration  = Nothing
     , point     = Nothing
     , showPoint = False
-    , maxRounds = 1
-    , round     = 1
-    , rounds    = []
+    , game      = 1
+    , durations = []
     , avg       = Nothing
     }
 
 
-drawInt : Maybe Int -> String
-drawInt int = int |> Maybe.map String.fromInt |> Maybe.withDefault ""
+viewInt : Maybe Int -> String
+viewInt int = int |> Maybe.map String.fromInt |> Maybe.withDefault ""
 
-
-duration  { clickedAt, startedAt, showAfter } =
-    Maybe.map3 (\a b c -> a - b - c) clickedAt startedAt showAfter
-
+viewMsecs : Maybe Int -> String
+viewMsecs int = int |> Maybe.map String.fromInt |> Maybe.withDefault ""
 
 after : Int -> Msg -> Cmd Msg
 after time msg =
@@ -66,8 +64,7 @@ startCmd =
 
 type Msg
   = Start
-  | SetMaxModels  String
-  | SetClickedAt  Time.Posix
+  | NextGame  Time.Posix
   | SetStartedAt  Time.Posix
   | SetShowAfter  Int
   | SetPoint      (Int, Int)
@@ -90,13 +87,24 @@ update msg model =
         ({ model | showAfter = Just showAfter }
         , after showAfter ShowPoint )
 
-    SetMaxModels ns ->
-        ({ model | maxRounds = ns |> String.toInt |> Maybe.withDefault 0 }
-        , Cmd.none )
+    NextGame time ->
+        let
+            clickedAt = Just <| Time.posixToMillis time
+            -- here startedAt and showAfter must be not Nothing
+            duration = (Maybe.map3 (\a b c -> a - b - c) clickedAt model.startedAt model.showAfter) |> Maybe.withDefault(0)
+            durations = duration :: model.durations
+            sum = durations |> List.sum |> toFloat
 
-    SetClickedAt time ->
-        ({ model | clickedAt = Just <| Time.posixToMillis time }
-        , Cmd.none )
+        in
+            ( { initialModel |
+                    clickedAt = clickedAt,
+                    duration = Just duration,
+                    game = model.game + 1,
+                    durations = durations,
+                    avg = Just <| (sum / (toFloat model.game) |> round)
+              }
+            , startCmd
+            )
 
     SetStartedAt time ->
         ({ model | startedAt = Just <| Time.posixToMillis time }
@@ -112,8 +120,8 @@ update msg model =
 
     PointMsg Point.Clicked ->
         ( model
-        , Task.perform SetClickedAt Time.now)
-
+        , Task.perform NextGame Time.now
+        )
 
 divClass : String -> List (Html Msg) -> Html Msg
 divClass  c content =
@@ -141,60 +149,66 @@ view model =
         , div [ class "row mt-5" ]
             [ div [ class "col" ]
                   [ button [ onClick Start ] [ text "Start" ]
+                  , div [ class "mt-5"] []
+                  , viewProperties model
+                  , viewField model
                   ]
+            , div [ class "col"]
+                  [ viewResult model ]
             ]
-        , div [ class "row mt-2" ]
-            [ div [ class "col-8"]
-                  [ viewProperties model ]
-            , col [ viewResult model ]
-            ]
-        , div [ class "row" ]
-              [ viewField model
-              ]
         ]
 
 
 propertiesTable : List (Html Msg, Html Msg) -> Html Msg
 propertiesTable props =
     table []
-        (List.map (\( key, val) ->
-                       tr []
-                       [ td [] [ key ]
-                       , td [] [ val ]
-                       ]
-                  )
-             props)
+      (List.map (\( key, val) ->
+                      tr []
+                      [ td [ style "padding-right" "20px"] [ key ]
+                      , td [] [ val ]
+                      ]
+                )
+            props)
 
 viewProperties : Model -> Html Msg
 viewProperties model =
     propertiesTable
-          [ ( text "Runden:"
-            , input [ value (String.fromInt model.maxRounds), onInput SetMaxModels ] []
+          [( text "Runde: "
+            , text <| String.fromInt model.game
             )
-
-          , ( text "Runde: "
-            , text <| String.fromInt model.round
-            )
-
+{--
           , ( text "Start: "
-            , text <| drawInt model.startedAt)
+            , text <| viewInt model.startedAt)
 
           , ( text "Zeige Punkt nach msecs: "
-            , text <| drawInt model.showAfter)
+            , text <| viewInt model.showAfter)
+-}
+          , ( text "Zeit (msecs) "
+            , text <| viewInt model.duration)
 
-          , ( text "Click: "
-            , text <| drawInt model.clickedAt)
-
-          , ( text "Reaktionszeit (msecs): "
-            , text <| drawInt (duration model))
+          , ( text "Zeit (Durchschn.)(msecs): "
+            , text <| viewInt model.avg)
             ]
 
 
 viewResult : Model -> Html Msg
 viewResult model =
-    propertiesTable [ (text "A", text "AAA")
-                    , (text "B", text "BBB")
-                    ]
+    table [ class "table"]
+        [ thead []
+              [ tr []
+                    [ th [] [ text "Runde"]
+                    , th [] [ text "Zeit"]]
+              ]
+        , tbody []
+            (model.durations
+            |> List.reverse
+            |> List.indexedMap (\ i msecs  ->
+                                    tr []
+                                    [ td [ style "padding-right" "20px"] [ text <| String.fromInt (i + 1) ]
+                                    , td [] [text <| String.fromInt msecs]
+                             ]
+                        ))
+        ]
 
 viewField : Model -> Html Msg
 viewField model =
