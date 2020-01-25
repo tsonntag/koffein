@@ -4,8 +4,6 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Process
-import Task
 import Time exposing (..)
 import Debug exposing (log)
 import Utils exposing (..)
@@ -16,7 +14,8 @@ main =
 
 
 type alias Item = ( String, String )
-type alias Model = { items : List Item
+type alias ItemList = List Item( String, String )
+type alias Model = { itemLists : List ItemList
                    , inputInterval : String
                    , interval : Int
                    , inputFactor : String
@@ -26,20 +25,33 @@ type alias Model = { items : List Item
 
 
 items : List Item
-items = [ ( "Rot", "yellow")
-        , ( "Grün", "red")
-        , ( "Rot", "green")
-        , ( "Gelb", "red")
+items = [ ( "rot", "gold")
+        , ( "grün", "red")
+        , ( "rot", "green")
+        , ( "gelb", "black")
+        , ( "blau", "red")
+        , ( "rot", "magenta")
+        , ( "grün", "green")
+        , ( "rot", "darkorange")
+        , ( "gelb", "black")
+        , ( "rot", "green")
+        , ( "orange", "red")
+        , ( "schwarz", "green")
+        , ( "weiß", "gold")
+        , ( "rot", "black")
+        , ( "gelb", "magenta")
+        , ( "lila", "red")
+        , ( "grün", "darkorange")
         ]
 
 initialModel : Model
 initialModel =
     { items = items
     , item = Nothing
-    , inputInterval = "2000"
-    , interval = 2000
-    , inputFactor = "0.8"
-    , factor = 0.8
+    , inputInterval = "1500"
+    , interval = 1500
+    , inputFactor = "0.95"
+    , factor = 0.95
     }
 
 
@@ -107,12 +119,12 @@ viewItem item =
             text ""
         Just ( text_, color )  ->
             div [ style "color" color]
-                [ h2 [] [ text text_ ] ]
+                [ h1 [] [ text text_ ] ]
 
 view : Model -> Html Msg
 view model =
     div [ class "container"]
-        [ h1 [] [text "Lies die Farben"]
+        [ h1 [] [text "Welche Farbe hat das Wort ?"]
         , div [ class "row mt-5" ]
             [ div   [ style "width" "100px"] [ text "Faktor:"]
             , input [ onInput SetInputFactor
@@ -124,7 +136,7 @@ view model =
             , input [ onInput SetInputInterval
                     , value model.inputInterval
                     ] []
-            , text  ( String.fromInt model.interval )
+--          , text  ( String.fromInt model.interval )
             ]
         , div [ class "row mt-5" ]
             [ button [ onClick Start ] [ text "Start" ]

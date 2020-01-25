@@ -5146,12 +5146,25 @@ var $elm$core$Task$perform = F2(
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Farben$items = _List_fromArray(
 	[
-		_Utils_Tuple2('Rot', 'yellow'),
-		_Utils_Tuple2('Grün', 'red'),
-		_Utils_Tuple2('Rot', 'green'),
-		_Utils_Tuple2('Gelb', 'red')
+		_Utils_Tuple2('rot', 'gold'),
+		_Utils_Tuple2('grün', 'red'),
+		_Utils_Tuple2('rot', 'green'),
+		_Utils_Tuple2('gelb', 'black'),
+		_Utils_Tuple2('blau', 'red'),
+		_Utils_Tuple2('rot', 'magenta'),
+		_Utils_Tuple2('grün', 'green'),
+		_Utils_Tuple2('rot', 'darkorange'),
+		_Utils_Tuple2('gelb', 'black'),
+		_Utils_Tuple2('rot', 'green'),
+		_Utils_Tuple2('orange', 'red'),
+		_Utils_Tuple2('schwarz', 'green'),
+		_Utils_Tuple2('weiß', 'gold'),
+		_Utils_Tuple2('rot', 'black'),
+		_Utils_Tuple2('gelb', 'magenta'),
+		_Utils_Tuple2('lila', 'red'),
+		_Utils_Tuple2('grün', 'darkorange')
 	]);
-var $author$project$Farben$initialModel = {factor: 0.8, inputFactor: '0.8', inputInterval: '2000', interval: 2000, item: $elm$core$Maybe$Nothing, items: $author$project$Farben$items};
+var $author$project$Farben$initialModel = {factor: 0.95, inputFactor: '0.95', inputInterval: '1500', interval: 1500, item: $elm$core$Maybe$Nothing, items: $author$project$Farben$items};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Farben$init = function (_v0) {
@@ -5319,7 +5332,6 @@ var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
-var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $author$project$Farben$viewItem = function (item) {
 	if (item.$ === 'Nothing') {
 		return $elm$html$Html$text('');
@@ -5336,7 +5348,7 @@ var $author$project$Farben$viewItem = function (item) {
 			_List_fromArray(
 				[
 					A2(
-					$elm$html$Html$h2,
+					$elm$html$Html$h1,
 					_List_Nil,
 					_List_fromArray(
 						[
@@ -5359,7 +5371,7 @@ var $author$project$Farben$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Lies die Farben')
+						$elm$html$Html$text('Welche Farbe hat das Wort ?')
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -5413,9 +5425,7 @@ var $author$project$Farben$view = function (model) {
 								$elm$html$Html$Events$onInput($author$project$Farben$SetInputInterval),
 								$elm$html$Html$Attributes$value(model.inputInterval)
 							]),
-						_List_Nil),
-						$elm$html$Html$text(
-						$elm$core$String$fromInt(model.interval))
+						_List_Nil)
 					])),
 				A2(
 				$elm$html$Html$div,
