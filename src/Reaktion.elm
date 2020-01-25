@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Reaktion exposing (..)
 
 import Browser
 import Html exposing (..)
@@ -10,8 +10,7 @@ import Task
 import Time exposing (..)
 import Point exposing (..)
 import Debug exposing (log)
-import Utils exposing (boolToString)
-
+import Utils exposing (..)
 
 main =
   Browser.element
@@ -41,17 +40,6 @@ initialModel =
     , durations = []
     , avg       = Nothing
     }
-
-
-viewInt : Maybe Int -> String
-viewInt int = int |> Maybe.map String.fromInt |> Maybe.withDefault ""
-
-viewMsecs : Maybe Int -> String
-viewMsecs int = int |> Maybe.map String.fromInt |> Maybe.withDefault ""
-
-after : Int -> Msg -> Cmd Msg
-after time msg =
-    Process.sleep (toFloat time) |> Task.perform (always msg)
 
 
 startCmd : Cmd Msg
@@ -147,28 +135,15 @@ view model =
     div [ class "container"]
         [ h1 [] [text "Miss Deine Reaktion"]
         , div [ class "row mt-5" ]
-            [ div [ class "col" ]
-                  [ button [ onClick Start ] [ text "Start" ]
+            [ col [ button [ onClick Start ] [ text "Start" ]
                   , div [ class "mt-5"] []
                   , viewProperties model
                   , viewField model
                   ]
-            , div [ class "col"]
-                  [ viewResult model ]
+            , col [ viewResult model ]
             ]
         ]
 
-
-propertiesTable : List (Html Msg, Html Msg) -> Html Msg
-propertiesTable props =
-    table []
-      (List.map (\( key, val) ->
-                      tr []
-                      [ td [ style "padding-right" "20px"] [ key ]
-                      , td [] [ val ]
-                      ]
-                )
-            props)
 
 viewProperties : Model -> Html Msg
 viewProperties model =
@@ -176,13 +151,6 @@ viewProperties model =
           [( text "Runde: "
             , text <| String.fromInt model.game
             )
-{--
-          , ( text "Start: "
-            , text <| viewInt model.startedAt)
-
-          , ( text "Zeige Punkt nach msecs: "
-            , text <| viewInt model.showAfter)
--}
           , ( text "Zeit (msecs) "
             , text <| viewInt model.duration)
 
@@ -204,7 +172,7 @@ viewResult model =
             |> List.reverse
             |> List.indexedMap (\ i msecs  ->
                                     tr []
-                                    [ td [ style "padding-right" "20px"] [ text <| String.fromInt (i + 1) ]
+                                    [ td [] [ text <| String.fromInt (i + 1) ]
                                     , td [] [text <| String.fromInt msecs]
                              ]
                         ))

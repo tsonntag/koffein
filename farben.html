@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Farben</title>
+        <link rel="stylesheet" href="bootstrap.min.css">
+        <script src="farben.js"></script>
+    </head>
+
+    <body>
+        <div id="elm"></div>
+        <script>
+         function readTextFile(file)
+         {
+             var file = new XMLHttpRequest();
+             file.open("GET", file, false);
+             file.onreadystatechange = function ()
+             {
+                 if(file.readyState === 4)
+                 {
+                     if(file.status === 200 || file.status == 0)
+                     {
+                         var text = file.responseText;
+                         alert(text);
+                     }
+                 }
+             }
+             file.send(null);
+         } ;
+         //console.log(readTextFile("./farben.txt"));
+         console.log("HJHAKJ");
+         var file = new File([], "farben.txt");
+         console.log(file);
+         var text = new FileReader().readAsText(file);
+         console.log(text);
+         </script>
+         <script>
+         var app = Elm.Farben.init({
+             node: document.getElementById('elm')
+         });
+        </script>
+    </body>
+</html>

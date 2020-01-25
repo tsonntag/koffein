@@ -4355,89 +4355,6 @@ function _Browser_load(url)
 		}
 	}));
 }
-
-
-
-function _Time_now(millisToPosix)
-{
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(millisToPosix(Date.now())));
-	});
-}
-
-var _Time_setInterval = F2(function(interval, task)
-{
-	return _Scheduler_binding(function(callback)
-	{
-		var id = setInterval(function() { _Scheduler_rawSpawn(task); }, interval);
-		return function() { clearInterval(id); };
-	});
-});
-
-function _Time_here()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(
-			A2($elm$time$Time$customZone, -(new Date().getTimezoneOffset()), _List_Nil)
-		));
-	});
-}
-
-
-function _Time_getZoneName()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		try
-		{
-			var name = $elm$time$Time$Name(Intl.DateTimeFormat().resolvedOptions().timeZone);
-		}
-		catch (e)
-		{
-			var name = $elm$time$Time$Offset(new Date().getTimezoneOffset());
-		}
-		callback(_Scheduler_succeed(name));
-	});
-}
-
-
-
-var _Bitwise_and = F2(function(a, b)
-{
-	return a & b;
-});
-
-var _Bitwise_or = F2(function(a, b)
-{
-	return a | b;
-});
-
-var _Bitwise_xor = F2(function(a, b)
-{
-	return a ^ b;
-});
-
-function _Bitwise_complement(a)
-{
-	return ~a;
-};
-
-var _Bitwise_shiftLeftBy = F2(function(offset, a)
-{
-	return a << offset;
-});
-
-var _Bitwise_shiftRightBy = F2(function(offset, a)
-{
-	return a >> offset;
-});
-
-var _Bitwise_shiftRightZfBy = F2(function(offset, a)
-{
-	return a >>> offset;
-});
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
@@ -5227,25 +5144,25 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Reaktion$initialModel = {avg: $elm$core$Maybe$Nothing, clickedAt: $elm$core$Maybe$Nothing, duration: $elm$core$Maybe$Nothing, durations: _List_Nil, game: 1, point: $elm$core$Maybe$Nothing, showAfter: $elm$core$Maybe$Nothing, showPoint: false, startedAt: $elm$core$Maybe$Nothing};
+var $author$project$Farben$items = _List_fromArray(
+	[
+		_Utils_Tuple2('Rot', 'yellow'),
+		_Utils_Tuple2('Grün', 'red'),
+		_Utils_Tuple2('Rot', 'green'),
+		_Utils_Tuple2('Gelb', 'red')
+	]);
+var $author$project$Farben$initialModel = {factor: 0.8, inputFactor: '0.8', inputInterval: '2000', interval: 2000, item: $elm$core$Maybe$Nothing, items: $author$project$Farben$items};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$Reaktion$init = function (_v0) {
-	return _Utils_Tuple2($author$project$Reaktion$initialModel, $elm$core$Platform$Cmd$none);
+var $author$project$Farben$init = function (_v0) {
+	return _Utils_Tuple2($author$project$Farben$initialModel, $elm$core$Platform$Cmd$none);
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
-var $author$project$Reaktion$subscriptions = function (model) {
+var $author$project$Farben$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$none;
 };
-var $author$project$Reaktion$NextGame = function (a) {
-	return {$: 'NextGame', a: a};
-};
-var $author$project$Point$Point = F2(
-	function (x, y) {
-		return {x: x, y: y};
-	});
-var $author$project$Reaktion$ShowPoint = {$: 'ShowPoint'};
+var $author$project$Farben$Next = {$: 'Next'};
 var $elm$core$Basics$always = F2(
 	function (a, _v0) {
 		return a;
@@ -5258,232 +5175,11 @@ var $author$project$Utils$after = F2(
 			$elm$core$Basics$always(msg),
 			$elm$core$Process$sleep(time));
 	});
-var $elm$core$Maybe$map3 = F4(
-	function (func, ma, mb, mc) {
-		if (ma.$ === 'Nothing') {
-			return $elm$core$Maybe$Nothing;
-		} else {
-			var a = ma.a;
-			if (mb.$ === 'Nothing') {
-				return $elm$core$Maybe$Nothing;
-			} else {
-				var b = mb.a;
-				if (mc.$ === 'Nothing') {
-					return $elm$core$Maybe$Nothing;
-				} else {
-					var c = mc.a;
-					return $elm$core$Maybe$Just(
-						A3(func, a, b, c));
-				}
-			}
-		}
-	});
-var $elm$time$Time$Name = function (a) {
-	return {$: 'Name', a: a};
+var $elm$core$String$fromFloat = _String_fromNumber;
+var $author$project$Farben$nextCmd = function (model) {
+	return A2($author$project$Utils$after, model.interval, $author$project$Farben$Next);
 };
-var $elm$time$Time$Offset = function (a) {
-	return {$: 'Offset', a: a};
-};
-var $elm$time$Time$Zone = F2(
-	function (a, b) {
-		return {$: 'Zone', a: a, b: b};
-	});
-var $elm$time$Time$customZone = $elm$time$Time$Zone;
-var $elm$time$Time$Posix = function (a) {
-	return {$: 'Posix', a: a};
-};
-var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
-var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
-var $elm$time$Time$posixToMillis = function (_v0) {
-	var millis = _v0.a;
-	return millis;
-};
-var $elm$core$Basics$round = _Basics_round;
-var $author$project$Reaktion$SetPoint = function (a) {
-	return {$: 'SetPoint', a: a};
-};
-var $author$project$Reaktion$SetShowAfter = function (a) {
-	return {$: 'SetShowAfter', a: a};
-};
-var $author$project$Reaktion$SetStartedAt = function (a) {
-	return {$: 'SetStartedAt', a: a};
-};
-var $elm$random$Random$Generate = function (a) {
-	return {$: 'Generate', a: a};
-};
-var $elm$random$Random$Seed = F2(
-	function (a, b) {
-		return {$: 'Seed', a: a, b: b};
-	});
-var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
-var $elm$random$Random$next = function (_v0) {
-	var state0 = _v0.a;
-	var incr = _v0.b;
-	return A2($elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
-};
-var $elm$random$Random$initialSeed = function (x) {
-	var _v0 = $elm$random$Random$next(
-		A2($elm$random$Random$Seed, 0, 1013904223));
-	var state1 = _v0.a;
-	var incr = _v0.b;
-	var state2 = (state1 + x) >>> 0;
-	return $elm$random$Random$next(
-		A2($elm$random$Random$Seed, state2, incr));
-};
-var $elm$random$Random$init = A2(
-	$elm$core$Task$andThen,
-	function (time) {
-		return $elm$core$Task$succeed(
-			$elm$random$Random$initialSeed(
-				$elm$time$Time$posixToMillis(time)));
-	},
-	$elm$time$Time$now);
-var $elm$random$Random$step = F2(
-	function (_v0, seed) {
-		var generator = _v0.a;
-		return generator(seed);
-	});
-var $elm$random$Random$onEffects = F3(
-	function (router, commands, seed) {
-		if (!commands.b) {
-			return $elm$core$Task$succeed(seed);
-		} else {
-			var generator = commands.a.a;
-			var rest = commands.b;
-			var _v1 = A2($elm$random$Random$step, generator, seed);
-			var value = _v1.a;
-			var newSeed = _v1.b;
-			return A2(
-				$elm$core$Task$andThen,
-				function (_v2) {
-					return A3($elm$random$Random$onEffects, router, rest, newSeed);
-				},
-				A2($elm$core$Platform$sendToApp, router, value));
-		}
-	});
-var $elm$random$Random$onSelfMsg = F3(
-	function (_v0, _v1, seed) {
-		return $elm$core$Task$succeed(seed);
-	});
-var $elm$random$Random$Generator = function (a) {
-	return {$: 'Generator', a: a};
-};
-var $elm$random$Random$map = F2(
-	function (func, _v0) {
-		var genA = _v0.a;
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var _v1 = genA(seed0);
-				var a = _v1.a;
-				var seed1 = _v1.b;
-				return _Utils_Tuple2(
-					func(a),
-					seed1);
-			});
-	});
-var $elm$random$Random$cmdMap = F2(
-	function (func, _v0) {
-		var generator = _v0.a;
-		return $elm$random$Random$Generate(
-			A2($elm$random$Random$map, func, generator));
-	});
-_Platform_effectManagers['Random'] = _Platform_createManager($elm$random$Random$init, $elm$random$Random$onEffects, $elm$random$Random$onSelfMsg, $elm$random$Random$cmdMap);
-var $elm$random$Random$command = _Platform_leaf('Random');
-var $elm$random$Random$generate = F2(
-	function (tagger, generator) {
-		return $elm$random$Random$command(
-			$elm$random$Random$Generate(
-				A2($elm$random$Random$map, tagger, generator)));
-	});
-var $elm$core$Bitwise$and = _Bitwise_and;
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
-var $elm$core$Bitwise$xor = _Bitwise_xor;
-var $elm$random$Random$peel = function (_v0) {
-	var state = _v0.a;
-	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
-	return ((word >>> 22) ^ word) >>> 0;
-};
-var $elm$random$Random$int = F2(
-	function (a, b) {
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var _v0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
-				var lo = _v0.a;
-				var hi = _v0.b;
-				var range = (hi - lo) + 1;
-				if (!((range - 1) & range)) {
-					return _Utils_Tuple2(
-						(((range - 1) & $elm$random$Random$peel(seed0)) >>> 0) + lo,
-						$elm$random$Random$next(seed0));
-				} else {
-					var threshhold = (((-range) >>> 0) % range) >>> 0;
-					var accountForBias = function (seed) {
-						accountForBias:
-						while (true) {
-							var x = $elm$random$Random$peel(seed);
-							var seedN = $elm$random$Random$next(seed);
-							if (_Utils_cmp(x, threshhold) < 0) {
-								var $temp$seed = seedN;
-								seed = $temp$seed;
-								continue accountForBias;
-							} else {
-								return _Utils_Tuple2((x % range) + lo, seedN);
-							}
-						}
-					};
-					return accountForBias(seed0);
-				}
-			});
-	});
-var $elm$random$Random$map2 = F3(
-	function (func, _v0, _v1) {
-		var genA = _v0.a;
-		var genB = _v1.a;
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var _v2 = genA(seed0);
-				var a = _v2.a;
-				var seed1 = _v2.b;
-				var _v3 = genB(seed1);
-				var b = _v3.a;
-				var seed2 = _v3.b;
-				return _Utils_Tuple2(
-					A2(func, a, b),
-					seed2);
-			});
-	});
-var $elm$random$Random$pair = F2(
-	function (genA, genB) {
-		return A3(
-			$elm$random$Random$map2,
-			F2(
-				function (a, b) {
-					return _Utils_Tuple2(a, b);
-				}),
-			genA,
-			genB);
-	});
-var $author$project$Reaktion$startCmd = $elm$core$Platform$Cmd$batch(
-	_List_fromArray(
-		[
-			A2($elm$core$Task$perform, $author$project$Reaktion$SetStartedAt, $elm$time$Time$now),
-			A2(
-			$elm$random$Random$generate,
-			$author$project$Reaktion$SetPoint,
-			A2(
-				$elm$random$Random$pair,
-				A2($elm$random$Random$int, 0, 10),
-				A2($elm$random$Random$int, 0, 20))),
-			A2(
-			$elm$random$Random$generate,
-			$author$project$Reaktion$SetShowAfter,
-			A2($elm$random$Random$int, 500, 2000))
-		]));
-var $elm$core$List$sum = function (numbers) {
-	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
-};
+var $elm$core$String$toFloat = _String_toFloat;
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (maybe.$ === 'Just') {
@@ -5493,86 +5189,68 @@ var $elm$core$Maybe$withDefault = F2(
 			return _default;
 		}
 	});
-var $author$project$Reaktion$update = F2(
+var $author$project$Farben$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
 			case 'Start':
-				return _Utils_Tuple2($author$project$Reaktion$initialModel, $author$project$Reaktion$startCmd);
-			case 'SetShowAfter':
-				var showAfter = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							showAfter: $elm$core$Maybe$Just(showAfter)
-						}),
-					A2($author$project$Utils$after, showAfter, $author$project$Reaktion$ShowPoint));
-			case 'NextGame':
-				var time = msg.a;
-				var clickedAt = $elm$core$Maybe$Just(
-					$elm$time$Time$posixToMillis(time));
-				var duration = A2(
+				var interval = A2(
 					$elm$core$Maybe$withDefault,
-					0,
-					A4(
-						$elm$core$Maybe$map3,
-						F3(
-							function (a, b, c) {
-								return (a - b) - c;
+					model.interval,
+					$elm$core$String$toInt(model.inputInterval));
+				var factor = A2(
+					$elm$core$Maybe$withDefault,
+					model.factor,
+					$elm$core$String$toFloat(model.inputFactor));
+				return _Utils_Tuple2(
+					_Utils_update(
+						$author$project$Farben$initialModel,
+						{
+							factor: factor,
+							inputFactor: $elm$core$String$fromFloat(factor),
+							inputInterval: $elm$core$String$fromInt(interval),
+							interval: interval
+						}),
+					A2($author$project$Utils$after, 500, $author$project$Farben$Next));
+			case 'Next':
+				var _v1 = model.items;
+				if (!_v1.b) {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				} else {
+					var item = _v1.a;
+					var rest = _v1.b;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								interval: $elm$core$Basics$ceiling(model.interval * model.factor),
+								item: $elm$core$Maybe$Just(item),
+								items: rest
 							}),
-						clickedAt,
-						model.startedAt,
-						model.showAfter));
-				var durations = A2($elm$core$List$cons, duration, model.durations);
-				var sum = $elm$core$List$sum(durations);
-				return _Utils_Tuple2(
-					_Utils_update(
-						$author$project$Reaktion$initialModel,
-						{
-							avg: $elm$core$Maybe$Just(
-								$elm$core$Basics$round(sum / model.game)),
-							clickedAt: clickedAt,
-							duration: $elm$core$Maybe$Just(duration),
-							durations: durations,
-							game: model.game + 1
-						}),
-					$author$project$Reaktion$startCmd);
-			case 'SetStartedAt':
-				var time = msg.a;
+						$author$project$Farben$nextCmd(model));
+				}
+			case 'SetInputFactor':
+				var val = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{
-							startedAt: $elm$core$Maybe$Just(
-								$elm$time$Time$posixToMillis(time))
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'SetPoint':
-				var _v1 = msg.a;
-				var x = _v1.a;
-				var y = _v1.b;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							point: $elm$core$Maybe$Just(
-								A2($author$project$Point$Point, x, y))
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'ShowPoint':
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{showPoint: true}),
+						{inputFactor: val}),
 					$elm$core$Platform$Cmd$none);
 			default:
-				var _v2 = msg.a;
+				var val = msg.a;
 				return _Utils_Tuple2(
-					model,
-					A2($elm$core$Task$perform, $author$project$Reaktion$NextGame, $elm$time$Time$now));
+					_Utils_update(
+						model,
+						{inputInterval: val}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
-var $author$project$Reaktion$Start = {$: 'Start'};
+var $author$project$Farben$SetInputFactor = function (a) {
+	return {$: 'SetInputFactor', a: a};
+};
+var $author$project$Farben$SetInputInterval = function (a) {
+	return {$: 'SetInputInterval', a: a};
+};
+var $author$project$Farben$Start = {$: 'Start'};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
@@ -5584,20 +5262,8 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $author$project$Reaktion$divClass = F2(
-	function (c, content) {
-		return A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class(c)
-				]),
-			content);
-	});
-var $author$project$Reaktion$col = function (content) {
-	return A2($author$project$Reaktion$divClass, 'col', content);
-};
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -5615,204 +5281,71 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Reaktion$PointMsg = function (a) {
-	return {$: 'PointMsg', a: a};
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
 };
-var $author$project$Point$Clicked = {$: 'Clicked'};
-var $author$project$Point$px = function (x) {
-	return $elm$core$String$fromInt(x * 10) + 'px';
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 'MayStopPropagation', a: a};
+};
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
 };
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
-var $author$project$Point$drawPoint = function (_v0) {
-	var x = _v0.x;
-	var y = _v0.y;
-	return A2(
-		$elm$html$Html$button,
-		_List_fromArray(
-			[
-				$elm$html$Html$Events$onClick($author$project$Point$Clicked),
-				$elm$html$Html$Attributes$class('btn btn-danger'),
-				A2($elm$html$Html$Attributes$style, 'width', '20px'),
-				A2($elm$html$Html$Attributes$style, 'height', '20px'),
-				A2(
-				$elm$html$Html$Attributes$style,
-				'margin-left',
-				$author$project$Point$px(x)),
-				A2(
-				$elm$html$Html$Attributes$style,
-				'margin-top',
-				$author$project$Point$px(y))
-			]),
-		_List_fromArray(
-			[
-				$elm$html$Html$text('')
-			]));
-};
-var $elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
-var $elm$html$Html$map = $elm$virtual_dom$VirtualDom$map;
-var $author$project$Reaktion$viewField = function (model) {
-	return A2(
-		$elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				function () {
-				var _v0 = _Utils_Tuple2(model.showPoint, model.point);
-				if (_v0.a && (_v0.b.$ === 'Just')) {
-					var p = _v0.b.a;
-					return A2(
-						$elm$html$Html$map,
-						$author$project$Reaktion$PointMsg,
-						$author$project$Point$drawPoint(p));
-				} else {
-					return $elm$html$Html$text('');
-				}
-			}()
-			]));
-};
-var $elm$html$Html$table = _VirtualDom_node('table');
-var $elm$html$Html$td = _VirtualDom_node('td');
-var $elm$html$Html$tr = _VirtualDom_node('tr');
-var $author$project$Utils$propertiesTable = function (props) {
-	return A2(
-		$elm$html$Html$table,
-		_List_Nil,
-		A2(
-			$elm$core$List$map,
-			function (_v0) {
-				var key = _v0.a;
-				var val = _v0.b;
-				return A2(
-					$elm$html$Html$tr,
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $elm$html$Html$h2 = _VirtualDom_node('h2');
+var $author$project$Farben$viewItem = function (item) {
+	if (item.$ === 'Nothing') {
+		return $elm$html$Html$text('');
+	} else {
+		var _v1 = item.a;
+		var text_ = _v1.a;
+		var color = _v1.b;
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					A2($elm$html$Html$Attributes$style, 'color', color)
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$h2,
 					_List_Nil,
 					_List_fromArray(
 						[
-							A2(
-							$elm$html$Html$td,
-							_List_fromArray(
-								[
-									A2($elm$html$Html$Attributes$style, 'padding-right', '20px')
-								]),
-							_List_fromArray(
-								[key])),
-							A2(
-							$elm$html$Html$td,
-							_List_Nil,
-							_List_fromArray(
-								[val]))
-						]));
-			},
-			props));
+							$elm$html$Html$text(text_)
+						]))
+				]));
+	}
 };
-var $elm$core$Maybe$map = F2(
-	function (f, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return $elm$core$Maybe$Just(
-				f(value));
-		} else {
-			return $elm$core$Maybe$Nothing;
-		}
-	});
-var $author$project$Utils$viewInt = function (_int) {
-	return A2(
-		$elm$core$Maybe$withDefault,
-		'',
-		A2($elm$core$Maybe$map, $elm$core$String$fromInt, _int));
-};
-var $author$project$Reaktion$viewProperties = function (model) {
-	return $author$project$Utils$propertiesTable(
-		_List_fromArray(
-			[
-				_Utils_Tuple2(
-				$elm$html$Html$text('Runde: '),
-				$elm$html$Html$text(
-					$elm$core$String$fromInt(model.game))),
-				_Utils_Tuple2(
-				$elm$html$Html$text('Zeit (msecs) '),
-				$elm$html$Html$text(
-					$author$project$Utils$viewInt(model.duration))),
-				_Utils_Tuple2(
-				$elm$html$Html$text('Zeit (Durchschn.)(msecs): '),
-				$elm$html$Html$text(
-					$author$project$Utils$viewInt(model.avg)))
-			]));
-};
-var $elm$html$Html$tbody = _VirtualDom_node('tbody');
-var $elm$html$Html$th = _VirtualDom_node('th');
-var $elm$html$Html$thead = _VirtualDom_node('thead');
-var $author$project$Reaktion$viewResult = function (model) {
-	return A2(
-		$elm$html$Html$table,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('table')
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$thead,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$tr,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$th,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Runde')
-									])),
-								A2(
-								$elm$html$Html$th,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Zeit')
-									]))
-							]))
-					])),
-				A2(
-				$elm$html$Html$tbody,
-				_List_Nil,
-				A2(
-					$elm$core$List$indexedMap,
-					F2(
-						function (i, msecs) {
-							return A2(
-								$elm$html$Html$tr,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$td,
-										_List_Nil,
-										_List_fromArray(
-											[
-												$elm$html$Html$text(
-												$elm$core$String$fromInt(i + 1))
-											])),
-										A2(
-										$elm$html$Html$td,
-										_List_Nil,
-										_List_fromArray(
-											[
-												$elm$html$Html$text(
-												$elm$core$String$fromInt(msecs))
-											]))
-									]));
-						}),
-					$elm$core$List$reverse(model.durations)))
-			]));
-};
-var $author$project$Reaktion$view = function (model) {
+var $author$project$Farben$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -5826,7 +5359,7 @@ var $author$project$Reaktion$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Miss Deine Reaktion')
+						$elm$html$Html$text('Lies die Farben')
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -5836,38 +5369,86 @@ var $author$project$Reaktion$view = function (model) {
 					]),
 				_List_fromArray(
 					[
-						$author$project$Reaktion$col(
+						A2(
+						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Reaktion$Start)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Start')
-									])),
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('mt-5')
-									]),
-								_List_Nil),
-								$author$project$Reaktion$viewProperties(model),
-								$author$project$Reaktion$viewField(model)
+								A2($elm$html$Html$Attributes$style, 'width', '100px')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Faktor:')
 							])),
-						$author$project$Reaktion$col(
+						A2(
+						$elm$html$Html$input,
 						_List_fromArray(
 							[
-								$author$project$Reaktion$viewResult(model)
+								$elm$html$Html$Events$onInput($author$project$Farben$SetInputFactor),
+								$elm$html$Html$Attributes$value(model.inputFactor)
+							]),
+						_List_Nil)
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('row mt-5')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								A2($elm$html$Html$Attributes$style, 'width', '100px')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Intervall:')
+							])),
+						A2(
+						$elm$html$Html$input,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onInput($author$project$Farben$SetInputInterval),
+								$elm$html$Html$Attributes$value(model.inputInterval)
+							]),
+						_List_Nil),
+						$elm$html$Html$text(
+						$elm$core$String$fromInt(model.interval))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('row mt-5')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onClick($author$project$Farben$Start)
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Start')
 							]))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('row mt-5')
+					]),
+				_List_fromArray(
+					[
+						$author$project$Farben$viewItem(model.item)
 					]))
 			]));
 };
-var $author$project$Reaktion$main = $elm$browser$Browser$element(
-	{init: $author$project$Reaktion$init, subscriptions: $author$project$Reaktion$subscriptions, update: $author$project$Reaktion$update, view: $author$project$Reaktion$view});
-_Platform_export({'Reaktion':{'init':$author$project$Reaktion$main(
+var $author$project$Farben$main = $elm$browser$Browser$element(
+	{init: $author$project$Farben$init, subscriptions: $author$project$Farben$subscriptions, update: $author$project$Farben$update, view: $author$project$Farben$view});
+_Platform_export({'Farben':{'init':$author$project$Farben$main(
 	$elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));
