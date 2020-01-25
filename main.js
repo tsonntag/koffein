@@ -5227,7 +5227,7 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Main$initialModel = {avg: $elm$core$Maybe$Nothing, clickedAt: $elm$core$Maybe$Nothing, duration: $elm$core$Maybe$Nothing, durations: _List_Nil, game: 1, point: $elm$core$Maybe$Nothing, showAfter: $elm$core$Maybe$Nothing, showPoint: false, startedAt: $elm$core$Maybe$Nothing};
+var $author$project$Main$initialModel = {avg: $elm$core$Maybe$Nothing, clickedAt: $elm$core$Maybe$Nothing, maxRounds: 1, point: $elm$core$Maybe$Nothing, round: 1, rounds: _List_Nil, showAfter: $elm$core$Maybe$Nothing, showPoint: false, startedAt: $elm$core$Maybe$Nothing};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$init = function (_v0) {
@@ -5238,13 +5238,13 @@ var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$none;
 };
-var $author$project$Main$NextGame = function (a) {
-	return {$: 'NextGame', a: a};
-};
 var $author$project$Point$Point = F2(
 	function (x, y) {
 		return {x: x, y: y};
 	});
+var $author$project$Main$SetClickedAt = function (a) {
+	return {$: 'SetClickedAt', a: a};
+};
 var $author$project$Main$ShowPoint = {$: 'ShowPoint'};
 var $elm$core$Basics$always = F2(
 	function (a, _v0) {
@@ -5257,26 +5257,6 @@ var $author$project$Main$after = F2(
 			$elm$core$Task$perform,
 			$elm$core$Basics$always(msg),
 			$elm$core$Process$sleep(time));
-	});
-var $elm$core$Maybe$map3 = F4(
-	function (func, ma, mb, mc) {
-		if (ma.$ === 'Nothing') {
-			return $elm$core$Maybe$Nothing;
-		} else {
-			var a = ma.a;
-			if (mb.$ === 'Nothing') {
-				return $elm$core$Maybe$Nothing;
-			} else {
-				var b = mb.a;
-				if (mc.$ === 'Nothing') {
-					return $elm$core$Maybe$Nothing;
-				} else {
-					var c = mc.a;
-					return $elm$core$Maybe$Just(
-						A3(func, a, b, c));
-				}
-			}
-		}
 	});
 var $elm$time$Time$Name = function (a) {
 	return {$: 'Name', a: a};
@@ -5298,7 +5278,6 @@ var $elm$time$Time$posixToMillis = function (_v0) {
 	var millis = _v0.a;
 	return millis;
 };
-var $elm$core$Basics$round = _Basics_round;
 var $author$project$Main$SetPoint = function (a) {
 	return {$: 'SetPoint', a: a};
 };
@@ -5481,9 +5460,6 @@ var $author$project$Main$startCmd = $elm$core$Platform$Cmd$batch(
 			$author$project$Main$SetShowAfter,
 			A2($elm$random$Random$int, 1000, 5000))
 		]));
-var $elm$core$List$sum = function (numbers) {
-	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
-};
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (maybe.$ === 'Just') {
@@ -5507,36 +5483,28 @@ var $author$project$Main$update = F2(
 							showAfter: $elm$core$Maybe$Just(showAfter)
 						}),
 					A2($author$project$Main$after, showAfter, $author$project$Main$ShowPoint));
-			case 'NextGame':
-				var time = msg.a;
-				var clickedAt = $elm$core$Maybe$Just(
-					$elm$time$Time$posixToMillis(time));
-				var duration = A2(
-					$elm$core$Maybe$withDefault,
-					0,
-					A4(
-						$elm$core$Maybe$map3,
-						F3(
-							function (a, b, c) {
-								return (a - b) - c;
-							}),
-						clickedAt,
-						model.startedAt,
-						model.showAfter));
-				var durations = A2($elm$core$List$cons, duration, model.durations);
-				var sum = $elm$core$List$sum(durations);
+			case 'SetMaxModels':
+				var ns = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
-						$author$project$Main$initialModel,
+						model,
 						{
-							avg: $elm$core$Maybe$Just(
-								$elm$core$Basics$round(sum / model.game)),
-							clickedAt: clickedAt,
-							duration: $elm$core$Maybe$Just(duration),
-							durations: durations,
-							game: model.game + 1
+							maxRounds: A2(
+								$elm$core$Maybe$withDefault,
+								0,
+								$elm$core$String$toInt(ns))
 						}),
-					$author$project$Main$startCmd);
+					$elm$core$Platform$Cmd$none);
+			case 'SetClickedAt':
+				var time = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							clickedAt: $elm$core$Maybe$Just(
+								$elm$time$Time$posixToMillis(time))
+						}),
+					$elm$core$Platform$Cmd$none);
 			case 'SetStartedAt':
 				var time = msg.a;
 				return _Utils_Tuple2(
@@ -5569,246 +5537,17 @@ var $author$project$Main$update = F2(
 				var _v2 = msg.a;
 				return _Utils_Tuple2(
 					model,
-					A2($elm$core$Task$perform, $author$project$Main$NextGame, $elm$time$Time$now));
+					A2($elm$core$Task$perform, $author$project$Main$SetClickedAt, $elm$time$Time$now));
 		}
 	});
-var $author$project$Main$Start = {$: 'Start'};
-var $elm$html$Html$button = _VirtualDom_node('button');
-var $elm$json$Json$Encode$string = _Json_wrap;
-var $elm$html$Html$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$string(string));
-	});
-var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Main$PointMsg = function (a) {
-	return {$: 'PointMsg', a: a};
-};
-var $author$project$Point$Clicked = {$: 'Clicked'};
-var $author$project$Point$px = function (x) {
-	return $elm$core$String$fromInt(x * 10) + 'px';
-};
-var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
-var $author$project$Point$drawPoint = function (_v0) {
-	var x = _v0.x;
-	var y = _v0.y;
-	return A2(
-		$elm$html$Html$button,
-		_List_fromArray(
-			[
-				$elm$html$Html$Events$onClick($author$project$Point$Clicked),
-				$elm$html$Html$Attributes$class('btn btn-danger'),
-				A2($elm$html$Html$Attributes$style, 'width', '20px'),
-				A2($elm$html$Html$Attributes$style, 'height', '20px'),
-				A2(
-				$elm$html$Html$Attributes$style,
-				'margin-left',
-				$author$project$Point$px(x)),
-				A2(
-				$elm$html$Html$Attributes$style,
-				'margin-top',
-				$author$project$Point$px(y))
-			]),
-		_List_fromArray(
-			[
-				$elm$html$Html$text('')
-			]));
-};
-var $elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
-var $elm$html$Html$map = $elm$virtual_dom$VirtualDom$map;
-var $author$project$Main$viewField = function (model) {
-	return A2(
-		$elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				function () {
-				var _v0 = _Utils_Tuple2(model.showPoint, model.point);
-				if (_v0.a && (_v0.b.$ === 'Just')) {
-					var p = _v0.b.a;
-					return A2(
-						$elm$html$Html$map,
-						$author$project$Main$PointMsg,
-						$author$project$Point$drawPoint(p));
-				} else {
-					return $elm$html$Html$text('');
-				}
-			}()
-			]));
-};
-var $elm$html$Html$table = _VirtualDom_node('table');
-var $elm$html$Html$td = _VirtualDom_node('td');
-var $elm$html$Html$tr = _VirtualDom_node('tr');
-var $author$project$Main$propertiesTable = function (props) {
-	return A2(
-		$elm$html$Html$table,
-		_List_Nil,
-		A2(
-			$elm$core$List$map,
-			function (_v0) {
-				var key = _v0.a;
-				var val = _v0.b;
-				return A2(
-					$elm$html$Html$tr,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$td,
-							_List_fromArray(
-								[
-									A2($elm$html$Html$Attributes$style, 'padding-right', '20px')
-								]),
-							_List_fromArray(
-								[key])),
-							A2(
-							$elm$html$Html$td,
-							_List_Nil,
-							_List_fromArray(
-								[val]))
-						]));
-			},
-			props));
-};
-var $elm$core$Maybe$map = F2(
-	function (f, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return $elm$core$Maybe$Just(
-				f(value));
-		} else {
-			return $elm$core$Maybe$Nothing;
-		}
-	});
-var $author$project$Main$viewInt = function (_int) {
-	return A2(
-		$elm$core$Maybe$withDefault,
-		'',
-		A2($elm$core$Maybe$map, $elm$core$String$fromInt, _int));
-};
-var $author$project$Main$viewProperties = function (model) {
-	return $author$project$Main$propertiesTable(
-		_List_fromArray(
-			[
-				_Utils_Tuple2(
-				$elm$html$Html$text('Runde: '),
-				$elm$html$Html$text(
-					$elm$core$String$fromInt(model.game))),
-				_Utils_Tuple2(
-				$elm$html$Html$text('Zeit (msecs) '),
-				$elm$html$Html$text(
-					$author$project$Main$viewInt(model.duration))),
-				_Utils_Tuple2(
-				$elm$html$Html$text('Zeit (Durchschn.)(msecs): '),
-				$elm$html$Html$text(
-					$author$project$Main$viewInt(model.avg)))
-			]));
-};
-var $elm$html$Html$tbody = _VirtualDom_node('tbody');
-var $elm$html$Html$th = _VirtualDom_node('th');
-var $elm$html$Html$thead = _VirtualDom_node('thead');
-var $author$project$Main$viewResult = function (model) {
-	return A2(
-		$elm$html$Html$table,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('table')
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$thead,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$tr,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$th,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Runde')
-									])),
-								A2(
-								$elm$html$Html$th,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Zeit')
-									]))
-							]))
-					])),
-				A2(
-				$elm$html$Html$tbody,
-				_List_Nil,
-				A2(
-					$elm$core$List$indexedMap,
-					F2(
-						function (i, msecs) {
-							return A2(
-								$elm$html$Html$tr,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$td,
-										_List_fromArray(
-											[
-												A2($elm$html$Html$Attributes$style, 'padding-right', '20px')
-											]),
-										_List_fromArray(
-											[
-												$elm$html$Html$text(
-												$elm$core$String$fromInt(i + 1))
-											])),
-										A2(
-										$elm$html$Html$td,
-										_List_Nil,
-										_List_fromArray(
-											[
-												$elm$html$Html$text(
-												$elm$core$String$fromInt(msecs))
-											]))
-									]));
-						}),
-					$elm$core$List$reverse(model.durations)))
-			]));
-};
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('container')
-			]),
+		_List_Nil,
 		_List_fromArray(
 			[
 				A2(
@@ -5816,54 +5555,7 @@ var $author$project$Main$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Messe Deine Reaktion')
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('row mt-5')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('col')
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Start)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Start')
-									])),
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('mt-5')
-									]),
-								_List_Nil),
-								$author$project$Main$viewProperties(model),
-								$author$project$Main$viewField(model)
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('col')
-							]),
-						_List_fromArray(
-							[
-								$author$project$Main$viewResult(model)
-							]))
+						$elm$html$Html$text('Miss Deine Reaktion')
 					]))
 			]));
 };

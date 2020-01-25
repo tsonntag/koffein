@@ -59,7 +59,7 @@ startCmd =
     Cmd.batch
         [ Task.perform    SetStartedAt Time.now
         , Random.generate SetPoint     (Random.pair (Random.int 0 10) (Random.int 0 20))
-        , Random.generate SetShowAfter (Random.int 1000 5000)
+        , Random.generate SetShowAfter (Random.int 500 2000)
         ]
 
 type Msg
@@ -145,7 +145,7 @@ container  content = divClass "container" content
 view : Model -> Html Msg
 view model =
     div [ class "container"]
-        [ h1 [] [text "Messe Deine Reaktion"]
+        [ h1 [] [text "Miss Deine Reaktion"]
         , div [ class "row mt-5" ]
             [ div [ class "col" ]
                   [ button [ onClick Start ] [ text "Start" ]
