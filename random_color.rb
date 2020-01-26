@@ -6,13 +6,12 @@ class Arr
     @indent = indent
   end
 
-  def elmed 
+  def to_elm 
     if @els.is_a? String
-#     @indent + "" + @els
       @els
     else
       ar = @els.map do |el|
-        Arr.new(el,"  ").elmed()
+        Arr.new(el,"  ").to_elm()
       end.join( "\n" + @indent + ", " )
       "[" + 
         "\n" +
@@ -20,27 +19,6 @@ class Arr
         @indent + "]"
     end
   end
-
-=begin
-  def elmed
-    lines = @els.each_with_index.map do |el,i| 
-       if el.is_a? String
-      #   @indent + (i == 0 ? "  " : ", ") + el 
-         el
-       else
-          Arr.new(el, "  ").elmed
-      end
-    end
-    lines = lines.each_with_index.map do |el,i| 
-      if el.is_a? String
-         @indent + (i == 0 ? "  " : ", ") + el 
-      else
-        el
-      end
-    end
-    [@indent + "["] +  lines + [@indent + "]"]
-  end
-=end
 
 end
  
@@ -71,22 +49,7 @@ end
 nitem = ARGV[0].to_i
 nlist = ARGV[1].to_i
 
-#puts Arr.elmed(ColorList.list(nitem))
-
-#puts "==="
-#lists = (1..nlist).map do |l|
-#  x = ColorList.list(nitem)
-#  y = Arr.elmed(x, "")
-#  puts "Y"
-#  puts y.class
-#  puts y
-#  y
-#end
-#
-#puts "XXXX"
-#puts Arr.new(lists).elmed("  ")
-#
-#puts Arr.new(%w(A B)).elmed
-puts Arr.new([%w(A B), %w(C D)]).elmed
-
-
+lists = (1..nlist).map do |l|
+  ColorList.list(nitem)
+end
+puts Arr.new(lists).to_elm
