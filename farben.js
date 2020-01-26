@@ -5144,27 +5144,7 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Farben$items = _List_fromArray(
-	[
-		_Utils_Tuple2('rot', 'gold'),
-		_Utils_Tuple2('grün', 'red'),
-		_Utils_Tuple2('rot', 'green'),
-		_Utils_Tuple2('gelb', 'black'),
-		_Utils_Tuple2('blau', 'red'),
-		_Utils_Tuple2('rot', 'magenta'),
-		_Utils_Tuple2('grün', 'green'),
-		_Utils_Tuple2('rot', 'darkorange'),
-		_Utils_Tuple2('gelb', 'black'),
-		_Utils_Tuple2('rot', 'green'),
-		_Utils_Tuple2('orange', 'red'),
-		_Utils_Tuple2('schwarz', 'green'),
-		_Utils_Tuple2('weiß', 'gold'),
-		_Utils_Tuple2('rot', 'black'),
-		_Utils_Tuple2('gelb', 'magenta'),
-		_Utils_Tuple2('lila', 'red'),
-		_Utils_Tuple2('grün', 'darkorange')
-	]);
-var $author$project$Farben$initialModel = {factor: 0.95, inputFactor: '0.95', inputInterval: '1500', interval: 1500, item: $elm$core$Maybe$Nothing, items: $author$project$Farben$items};
+var $author$project$Farben$initialModel = {factor: 0.95, inputFactor: '0.95', inputInterval: '1500', interval: 1500, item: $elm$core$Maybe$Nothing, items: _List_Nil};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Farben$init = function (_v0) {

@@ -7,15 +7,14 @@ import Html.Events exposing (..)
 import Time exposing (..)
 import Debug exposing (log)
 import Utils exposing (..)
+import ItemLists exposing (..)
 
 main =
   Browser.element
     { init = init , update = update , subscriptions = subscriptions , view = view}
 
-
 type alias Item = ( String, String )
-type alias ItemList = List Item( String, String )
-type alias Model = { itemLists : List ItemList
+type alias Model = { items : List Item
                    , inputInterval : String
                    , interval : Int
                    , inputFactor : String
@@ -24,29 +23,11 @@ type alias Model = { itemLists : List ItemList
                    }
 
 
-items : List Item
-items = [ ( "rot", "gold")
-        , ( "grün", "red")
-        , ( "rot", "green")
-        , ( "gelb", "black")
-        , ( "blau", "red")
-        , ( "rot", "magenta")
-        , ( "grün", "green")
-        , ( "rot", "darkorange")
-        , ( "gelb", "black")
-        , ( "rot", "green")
-        , ( "orange", "red")
-        , ( "schwarz", "green")
-        , ( "weiß", "gold")
-        , ( "rot", "black")
-        , ( "gelb", "magenta")
-        , ( "lila", "red")
-        , ( "grün", "darkorange")
-        ]
+itemLists = ItemLists.data
 
 initialModel : Model
 initialModel =
-    { items = items
+    { items = []
     , item = Nothing
     , inputInterval = "1500"
     , interval = 1500

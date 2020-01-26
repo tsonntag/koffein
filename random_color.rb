@@ -52,4 +52,12 @@ nlist = ARGV[1].to_i
 lists = (1..nlist).map do |l|
   ColorList.list(nitem)
 end
-puts Arr.new(lists).to_elm
+list =  Arr.new(lists).to_elm
+lines = list.split("\n").map{|l| "  " + l}.join("\n")
+
+puts <<EOS
+module ItemLists exposing (..)
+
+data = 
+#{lines}
+EOS
