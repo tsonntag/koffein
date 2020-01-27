@@ -6043,9 +6043,9 @@ var $author$project$Farben$viewGame = function (model) {
 				function () {
 				var _v0 = _Utils_Tuple2(model.itemListIndex, model.itemList);
 				if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
-					var i = _v0.a.a;
-					var l = _v0.b.a;
-					return A3($author$project$Farben$viewBody, model, l, i);
+					var index = _v0.a.a;
+					var list = _v0.b.a;
+					return A3($author$project$Farben$viewBody, model, list, index);
 				} else {
 					return A2(
 						$elm$html$Html$div,
