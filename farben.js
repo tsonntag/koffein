@@ -5475,9 +5475,7 @@ var $author$project$Farben$update = F2(
 							}),
 						$author$project$Farben$nextCmd(model));
 				} else {
-					return _Utils_Tuple2(
-						A2($author$project$Farben$resetModel, model.itemListIndex, model),
-						$elm$core$Platform$Cmd$none);
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
 			case 'SetInputFactor':
 				var val = msg.a;
@@ -5570,7 +5568,7 @@ var $author$project$Farben$printItem = function (_v0) {
 						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								A2($elm$html$Html$Attributes$style, 'width', '50')
+								A2($elm$html$Html$Attributes$style, 'width', '50px')
 							]),
 						_List_fromArray(
 							[

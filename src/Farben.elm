@@ -119,7 +119,7 @@ update msg model =
                     )
 
                 _ ->
-                    ( resetModel model.itemListIndex model
+                    ( model --resetModel model.itemListIndex model
                     , Cmd.none )
 
 
@@ -162,7 +162,7 @@ printItem : Item -> Html Msg
 printItem ( i, name, color ) =
     li []
        [ h3 [ style "display" "inline-flex" ]
-             [ div [ style "width" "50"]
+             [ div [ style "width" "50px"]
                    [ text <| (String.fromInt i) ++ "."]
              , div [] [ text <| translateColor color ]
              ]
