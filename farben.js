@@ -5475,7 +5475,9 @@ var $author$project$Farben$update = F2(
 							}),
 						$author$project$Farben$nextCmd(model));
 				} else {
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					return _Utils_Tuple2(
+						A2($author$project$Farben$resetModel, model.itemListIndex, model),
+						$elm$core$Platform$Cmd$none);
 				}
 			case 'SetInputFactor':
 				var val = msg.a;
@@ -5990,7 +5992,12 @@ var $author$project$Farben$viewBody = F3(
 								[
 									$elm$html$Html$text(
 									$elm$core$String$fromInt(
-										$elm$core$List$length(list)))
+										$elm$core$List$length(
+											A2(
+												$elm$core$Maybe$withDefault,
+												_List_Nil,
+												$author$project$Farben$getItemList(
+													$elm$core$Maybe$Just(index))))))
 								]))
 						])),
 					A2(
