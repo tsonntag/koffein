@@ -37,7 +37,7 @@ class ColorList
     (1..@nitem).map do |i|
       rcolor = @@colors[Random.rand(@@ncolors)]
       rfarbe = @@farben[Random.rand(@@nfarben)]
-        "( \"#{rfarbe}\", \"#{rcolor}\" )"
+        "( #{i}, \"#{rfarbe}\", \"#{rcolor}\" )"
     end
   end
 
@@ -46,8 +46,8 @@ class ColorList
   end
 end
 
-nitem = ARGV[0].to_i
-nlist = ARGV[1].to_i
+nlist = ARGV[0].to_i
+nitem = ARGV[1].to_i
 
 lists = (1..nlist).map do |l|
   ColorList.list(nitem)

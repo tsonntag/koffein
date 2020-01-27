@@ -5181,6 +5181,7 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
+var $author$project$Farben$Game = {$: 'Game'};
 var $elm$core$Bitwise$and = _Bitwise_and;
 var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
 var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
@@ -5227,21 +5228,68 @@ var $author$project$ItemLists$data = _List_fromArray(
 	[
 		_List_fromArray(
 		[
-			_Utils_Tuple2('lila', 'green'),
-			_Utils_Tuple2('schwarz', 'gold'),
-			_Utils_Tuple2('rot', 'magenta')
+			_Utils_Tuple3(1, 'blau', 'green'),
+			_Utils_Tuple3(2, 'schwarz', 'green'),
+			_Utils_Tuple3(3, 'weiß', 'darkorange'),
+			_Utils_Tuple3(4, 'grün', 'red'),
+			_Utils_Tuple3(5, 'schwarz', 'gold'),
+			_Utils_Tuple3(6, 'grün', 'gold'),
+			_Utils_Tuple3(7, 'schwarz', 'black'),
+			_Utils_Tuple3(8, 'lila', 'red'),
+			_Utils_Tuple3(9, 'lila', 'red'),
+			_Utils_Tuple3(10, 'weiß', 'darkorange')
 		]),
 		_List_fromArray(
 		[
-			_Utils_Tuple2('schwarz', 'red'),
-			_Utils_Tuple2('schwarz', 'darkorange'),
-			_Utils_Tuple2('rot', 'magenta')
+			_Utils_Tuple3(1, 'rot', 'black'),
+			_Utils_Tuple3(2, 'blau', 'gold'),
+			_Utils_Tuple3(3, 'weiß', 'gold'),
+			_Utils_Tuple3(4, 'weiß', 'black'),
+			_Utils_Tuple3(5, 'gelb', 'green'),
+			_Utils_Tuple3(6, 'lila', 'green'),
+			_Utils_Tuple3(7, 'schwarz', 'red'),
+			_Utils_Tuple3(8, 'lila', 'red'),
+			_Utils_Tuple3(9, 'grün', 'green'),
+			_Utils_Tuple3(10, 'blau', 'black')
 		]),
 		_List_fromArray(
 		[
-			_Utils_Tuple2('gelb', 'red'),
-			_Utils_Tuple2('rot', 'darkorange'),
-			_Utils_Tuple2('weiß', 'darkorange')
+			_Utils_Tuple3(1, 'weiß', 'gold'),
+			_Utils_Tuple3(2, 'gelb', 'green'),
+			_Utils_Tuple3(3, 'gelb', 'gold'),
+			_Utils_Tuple3(4, 'rot', 'darkorange'),
+			_Utils_Tuple3(5, 'rot', 'darkorange'),
+			_Utils_Tuple3(6, 'blau', 'green'),
+			_Utils_Tuple3(7, 'blau', 'black'),
+			_Utils_Tuple3(8, 'rot', 'red'),
+			_Utils_Tuple3(9, 'blau', 'green'),
+			_Utils_Tuple3(10, 'weiß', 'darkorange')
+		]),
+		_List_fromArray(
+		[
+			_Utils_Tuple3(1, 'blau', 'red'),
+			_Utils_Tuple3(2, 'schwarz', 'gold'),
+			_Utils_Tuple3(3, 'weiß', 'magenta'),
+			_Utils_Tuple3(4, 'blau', 'red'),
+			_Utils_Tuple3(5, 'rot', 'green'),
+			_Utils_Tuple3(6, 'schwarz', 'darkorange'),
+			_Utils_Tuple3(7, 'blau', 'magenta'),
+			_Utils_Tuple3(8, 'lila', 'green'),
+			_Utils_Tuple3(9, 'grün', 'green'),
+			_Utils_Tuple3(10, 'lila', 'red')
+		]),
+		_List_fromArray(
+		[
+			_Utils_Tuple3(1, 'gelb', 'black'),
+			_Utils_Tuple3(2, 'gelb', 'magenta'),
+			_Utils_Tuple3(3, 'weiß', 'darkorange'),
+			_Utils_Tuple3(4, 'grün', 'green'),
+			_Utils_Tuple3(5, 'weiß', 'green'),
+			_Utils_Tuple3(6, 'lila', 'red'),
+			_Utils_Tuple3(7, 'weiß', 'gold'),
+			_Utils_Tuple3(8, 'grün', 'darkorange'),
+			_Utils_Tuple3(9, 'rot', 'darkorange'),
+			_Utils_Tuple3(10, 'schwarz', 'magenta')
 		])
 	]);
 var $elm$core$Array$fromListHelp = F3(
@@ -5300,7 +5348,8 @@ var $author$project$Farben$initialModel = {
 	interval: 1500,
 	item: $elm$core$Maybe$Nothing,
 	itemList: $author$project$Farben$getItemList($author$project$Farben$initialItemListIndex),
-	itemListIndex: $author$project$Farben$initialItemListIndex
+	itemListIndex: $author$project$Farben$initialItemListIndex,
+	page: $author$project$Farben$Game
 };
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
@@ -5383,19 +5432,13 @@ var $author$project$Farben$update = F2(
 		switch (msg.$) {
 			case 'Start':
 				var interval = A2(
-					$author$project$Farben$spy,
-					'INTERVAL:',
-					A2(
-						$elm$core$Maybe$withDefault,
-						model.interval,
-						$elm$core$String$toInt(model.inputInterval)));
+					$elm$core$Maybe$withDefault,
+					model.interval,
+					$elm$core$String$toInt(model.inputInterval));
 				var factor = A2(
-					$author$project$Farben$spy,
-					'FACTOR:',
-					A2(
-						$elm$core$Maybe$withDefault,
-						model.factor,
-						$elm$core$String$toFloat(model.inputFactor)));
+					$elm$core$Maybe$withDefault,
+					model.factor,
+					$elm$core$String$toFloat(model.inputFactor));
 				return _Utils_Tuple2(
 					A2(
 						$author$project$Farben$resetModel,
@@ -5424,7 +5467,10 @@ var $author$project$Farben$update = F2(
 							model,
 							{
 								interval: $elm$core$Basics$ceiling(model.interval * model.factor),
-								item: $elm$core$Maybe$Just(item),
+								item: A2(
+									$author$project$Farben$spy,
+									'ITEM',
+									$elm$core$Maybe$Just(item)),
 								itemList: $elm$core$Maybe$Just(rest)
 							}),
 						$author$project$Farben$nextCmd(model));
@@ -5445,7 +5491,7 @@ var $author$project$Farben$update = F2(
 						model,
 						{inputInterval: val}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'SetItemList':
 				var val = msg.a;
 				return _Utils_Tuple2(
 					A2(
@@ -5453,8 +5499,19 @@ var $author$project$Farben$update = F2(
 						$elm$core$String$toInt(val),
 						model),
 					$elm$core$Platform$Cmd$none);
+			default:
+				var page = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{page: page}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
+var $author$project$Farben$SetPage = function (a) {
+	return {$: 'SetPage', a: a};
+};
+var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5466,8 +5523,216 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$html$Html$h3 = _VirtualDom_node('h3');
+var $elm$html$Html$li = _VirtualDom_node('li');
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Farben$translateColor = function (en) {
+	switch (en) {
+		case 'red':
+			return 'rot';
+		case 'green':
+			return 'grün';
+		case 'black':
+			return 'schwarz';
+		case 'magenta':
+			return 'magenta';
+		case 'darkorange':
+			return 'orange';
+		case 'gold':
+			return 'gelb';
+		default:
+			return en;
+	}
+};
+var $author$project$Farben$printItem = function (_v0) {
+	var i = _v0.a;
+	var name = _v0.b;
+	var color = _v0.c;
+	return A2(
+		$elm$html$Html$li,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$h3,
+				_List_fromArray(
+					[
+						A2($elm$html$Html$Attributes$style, 'display', 'inline-flex')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								A2($elm$html$Html$Attributes$style, 'width', '50')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								$elm$core$String$fromInt(i) + '.')
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								$author$project$Farben$translateColor(color))
+							]))
+					]))
+			]));
+};
+var $elm$html$Html$ul = _VirtualDom_node('ul');
+var $author$project$Farben$doPrintItemList = F2(
+	function (list, i) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('row mt-5')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$h1,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								'Liste ' + $elm$core$String$fromInt(i + 1))
+							]))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('row mt-3')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$ul,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('list-unstyled')
+							]),
+						A2($elm$core$List$map, $author$project$Farben$printItem, list))
+					]))
+			]);
+	});
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $author$project$Farben$printAllItemLists = function (lists) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('container')
+			]),
+		_Utils_ap(
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row mt-3')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onClick(
+									$author$project$Farben$SetPage($author$project$Farben$Game))
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Zurück')
+								]))
+						]))
+				]),
+			A2(
+				$elm$core$List$indexedMap,
+				F2(
+					function (i, list) {
+						return A2(
+							$elm$html$Html$div,
+							_List_Nil,
+							A2($author$project$Farben$doPrintItemList, list, i));
+					}),
+				$elm$core$Array$toList(lists))));
+};
+var $author$project$Farben$printOneItemList = function (model) {
+	var _v0 = _Utils_Tuple2(model.itemListIndex, model.itemList);
+	if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
+		var i = _v0.a.a;
+		var l = _v0.b.a;
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('container')
+				]),
+			_Utils_ap(
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('row mt-3')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$button,
+								_List_fromArray(
+									[
+										$elm$html$Html$Events$onClick(
+										$author$project$Farben$SetPage($author$project$Farben$Game))
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Zurück')
+									]))
+							]))
+					]),
+				A2($author$project$Farben$doPrintItemList, l, i)));
+	} else {
+		return A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Keine Liste vorhanden')
+				]));
+	}
+};
+var $author$project$Farben$PrintAll = {$: 'PrintAll'};
+var $author$project$Farben$PrintOne = {$: 'PrintOne'};
 var $author$project$Farben$SetInputFactor = function (a) {
 	return {$: 'SetInputFactor', a: a};
 };
@@ -5478,7 +5743,6 @@ var $author$project$Farben$SetItemList = function (a) {
 	return {$: 'SetItemList', a: a};
 };
 var $author$project$Farben$Start = {$: 'Start'};
-var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$option = _VirtualDom_node('option');
 var $elm$json$Json$Encode$bool = _Json_wrap;
@@ -5513,23 +5777,6 @@ var $elm$core$Array$length = function (_v0) {
 	return len;
 };
 var $author$project$Farben$nItemLists = $elm$core$Array$length($author$project$Farben$itemLists);
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
 var $elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
@@ -5564,26 +5811,39 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
 };
 var $elm$html$Html$select = _VirtualDom_node('select');
-var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $author$project$Farben$viewItem = function (item) {
 	if (item.$ === 'Nothing') {
 		return $elm$html$Html$text('');
 	} else {
 		var _v1 = item.a;
-		var text_ = _v1.a;
-		var color = _v1.b;
+		var i = _v1.a;
+		var text_ = _v1.b;
+		var color = _v1.c;
 		return A2(
-			$elm$html$Html$div,
+			$elm$html$Html$h1,
 			_List_fromArray(
 				[
-					A2($elm$html$Html$Attributes$style, 'color', color)
+					A2($elm$html$Html$Attributes$style, 'display', 'inline-flex')
 				]),
 			_List_fromArray(
 				[
 					A2(
-					$elm$html$Html$h1,
-					_List_Nil,
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							A2($elm$html$Html$Attributes$style, 'width', '70px')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text(
+							$elm$core$String$fromInt(i) + '.')
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							A2($elm$html$Html$Attributes$style, 'color', color)
+						]),
 					_List_fromArray(
 						[
 							$elm$html$Html$text(text_)
@@ -5591,8 +5851,8 @@ var $author$project$Farben$viewItem = function (item) {
 				]));
 	}
 };
-var $author$project$Farben$viewBody = F2(
-	function (model, index) {
+var $author$project$Farben$viewBody = F3(
+	function (model, list, index) {
 		return A2(
 			$elm$html$Html$div,
 			_List_Nil,
@@ -5656,7 +5916,7 @@ var $author$project$Farben$viewBody = F2(
 					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('row mt-2')
+							$elm$html$Html$Attributes$class('row mt-3')
 						]),
 					_List_fromArray(
 						[
@@ -5679,13 +5939,65 @@ var $author$project$Farben$viewBody = F2(
 							A2(
 								$elm$core$List$map,
 								$author$project$Farben$intToOption(index),
-								A2($elm$core$List$range, 0, $author$project$Farben$nItemLists - 1)))
+								A2($elm$core$List$range, 0, $author$project$Farben$nItemLists - 1))),
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onClick(
+									$author$project$Farben$SetPage($author$project$Farben$PrintOne)),
+									$elm$html$Html$Attributes$class('ml-3')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Zeige Liste')
+								])),
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onClick(
+									$author$project$Farben$SetPage($author$project$Farben$PrintAll)),
+									$elm$html$Html$Attributes$class('ml-3')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Zeige alle Listen')
+								]))
 						])),
 					A2(
 					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('row mt-5')
+							$elm$html$Html$Attributes$class('row mt-2')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									A2($elm$html$Html$Attributes$style, 'width', '100px')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Farben:')
+								])),
+							A2(
+							$elm$html$Html$div,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text(
+									$elm$core$String$fromInt(
+										$elm$core$List$length(list)))
+								]))
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row mt-4')
 						]),
 					_List_fromArray(
 						[
@@ -5712,7 +6024,7 @@ var $author$project$Farben$viewBody = F2(
 						]))
 				]));
 	});
-var $author$project$Farben$view = function (model) {
+var $author$project$Farben$viewGame = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -5729,10 +6041,11 @@ var $author$project$Farben$view = function (model) {
 						$elm$html$Html$text('Welche Farbe hat das Wort ?')
 					])),
 				function () {
-				var _v0 = model.itemListIndex;
-				if (_v0.$ === 'Just') {
-					var i = _v0.a;
-					return A2($author$project$Farben$viewBody, model, i);
+				var _v0 = _Utils_Tuple2(model.itemListIndex, model.itemList);
+				if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
+					var i = _v0.a.a;
+					var l = _v0.b.a;
+					return A3($author$project$Farben$viewBody, model, l, i);
 				} else {
 					return A2(
 						$elm$html$Html$div,
@@ -5744,6 +6057,17 @@ var $author$project$Farben$view = function (model) {
 				}
 			}()
 			]));
+};
+var $author$project$Farben$view = function (model) {
+	var _v0 = model.page;
+	switch (_v0.$) {
+		case 'PrintOne':
+			return $author$project$Farben$printOneItemList(model);
+		case 'PrintAll':
+			return $author$project$Farben$printAllItemLists($author$project$Farben$itemLists);
+		default:
+			return $author$project$Farben$viewGame(model);
+	}
 };
 var $author$project$Farben$main = $elm$browser$Browser$element(
 	{init: $author$project$Farben$init, subscriptions: $author$project$Farben$subscriptions, update: $author$project$Farben$update, view: $author$project$Farben$view});
