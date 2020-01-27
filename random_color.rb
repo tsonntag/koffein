@@ -6,14 +6,14 @@ class Arr
     @indent = indent
   end
 
-  def to_elm 
+  def to_elm
     if @els.is_a? String
       @els
     else
       ar = @els.map do |el|
         Arr.new(el,"  ").to_elm()
       end.join( "\n" + @indent + ", " )
-      "[" + 
+      "[" +
         "\n" +
         @indent + "  " + ar + "\n" +
         @indent + "]"
@@ -21,7 +21,7 @@ class Arr
   end
 
 end
- 
+
 class ColorList
   def initialize(nitem)
     @nitem = nitem
@@ -33,7 +33,7 @@ class ColorList
   @@ncolors = @@colors.size
   @@nfarben = @@farben.size
 
-  def list 
+  def list
     (1..@nitem).map do |i|
       rcolor = @@colors[Random.rand(@@ncolors)]
       rfarbe = @@farben[Random.rand(@@nfarben)]
@@ -58,6 +58,6 @@ lines = list.split("\n").map{|l| "  " + l}.join("\n")
 puts <<EOS
 module ItemLists exposing (..)
 
-data = 
+data =
 #{lines}
 EOS

@@ -1,13 +1,20 @@
 module ItemLists exposing (..)
 
-data = 
+data =
   [
     [
-      ( "schwarz", "black" )
-    , ( "schwarz", "black" )
+      ( "lila", "green" )
+    , ( "schwarz", "gold" )
+    , ( "rot", "magenta" )
     ]
   , [
-      ( "schwarz", "darkorange" )
-    , ( "blau", "gold" )
+      ( "schwarz", "red" )
+    , ( "schwarz", "darkorange" )
+    , ( "rot", "magenta" )
+    ]
+  , [
+      ( "gelb", "red" )
+    , ( "rot", "darkorange" )
+    , ( "weiß", "darkorange" )
     ]
   ]

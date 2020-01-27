@@ -4355,6 +4355,43 @@ function _Browser_load(url)
 		}
 	}));
 }
+
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
@@ -5144,7 +5181,127 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Farben$initialModel = {factor: 0.95, inputFactor: '0.95', inputInterval: '1500', interval: 1500, item: $elm$core$Maybe$Nothing, items: _List_Nil};
+var $elm$core$Bitwise$and = _Bitwise_and;
+var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
+var $elm$core$Basics$ge = _Utils_ge;
+var $elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
+var $elm$core$Array$getHelp = F3(
+	function (shift, index, tree) {
+		getHelp:
+		while (true) {
+			var pos = $elm$core$Array$bitMask & (index >>> shift);
+			var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
+			if (_v0.$ === 'SubTree') {
+				var subTree = _v0.a;
+				var $temp$shift = shift - $elm$core$Array$shiftStep,
+					$temp$index = index,
+					$temp$tree = subTree;
+				shift = $temp$shift;
+				index = $temp$index;
+				tree = $temp$tree;
+				continue getHelp;
+			} else {
+				var values = _v0.a;
+				return A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, values);
+			}
+		}
+	});
+var $elm$core$Bitwise$shiftLeftBy = _Bitwise_shiftLeftBy;
+var $elm$core$Array$tailIndex = function (len) {
+	return (len >>> 5) << 5;
+};
+var $elm$core$Array$get = F2(
+	function (index, _v0) {
+		var len = _v0.a;
+		var startShift = _v0.b;
+		var tree = _v0.c;
+		var tail = _v0.d;
+		return ((index < 0) || (_Utils_cmp(index, len) > -1)) ? $elm$core$Maybe$Nothing : ((_Utils_cmp(
+			index,
+			$elm$core$Array$tailIndex(len)) > -1) ? $elm$core$Maybe$Just(
+			A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, tail)) : $elm$core$Maybe$Just(
+			A3($elm$core$Array$getHelp, startShift, index, tree)));
+	});
+var $author$project$ItemLists$data = _List_fromArray(
+	[
+		_List_fromArray(
+		[
+			_Utils_Tuple2('lila', 'green'),
+			_Utils_Tuple2('schwarz', 'gold'),
+			_Utils_Tuple2('rot', 'magenta')
+		]),
+		_List_fromArray(
+		[
+			_Utils_Tuple2('schwarz', 'red'),
+			_Utils_Tuple2('schwarz', 'darkorange'),
+			_Utils_Tuple2('rot', 'magenta')
+		]),
+		_List_fromArray(
+		[
+			_Utils_Tuple2('gelb', 'red'),
+			_Utils_Tuple2('rot', 'darkorange'),
+			_Utils_Tuple2('weiß', 'darkorange')
+		])
+	]);
+var $elm$core$Array$fromListHelp = F3(
+	function (list, nodeList, nodeListSize) {
+		fromListHelp:
+		while (true) {
+			var _v0 = A2($elm$core$Elm$JsArray$initializeFromList, $elm$core$Array$branchFactor, list);
+			var jsArray = _v0.a;
+			var remainingItems = _v0.b;
+			if (_Utils_cmp(
+				$elm$core$Elm$JsArray$length(jsArray),
+				$elm$core$Array$branchFactor) < 0) {
+				return A2(
+					$elm$core$Array$builderToArray,
+					true,
+					{nodeList: nodeList, nodeListSize: nodeListSize, tail: jsArray});
+			} else {
+				var $temp$list = remainingItems,
+					$temp$nodeList = A2(
+					$elm$core$List$cons,
+					$elm$core$Array$Leaf(jsArray),
+					nodeList),
+					$temp$nodeListSize = nodeListSize + 1;
+				list = $temp$list;
+				nodeList = $temp$nodeList;
+				nodeListSize = $temp$nodeListSize;
+				continue fromListHelp;
+			}
+		}
+	});
+var $elm$core$Array$fromList = function (list) {
+	if (!list.b) {
+		return $elm$core$Array$empty;
+	} else {
+		return A3($elm$core$Array$fromListHelp, list, _List_Nil, 0);
+	}
+};
+var $author$project$Farben$itemLists = $elm$core$Array$fromList($author$project$ItemLists$data);
+var $author$project$Farben$getItemList = function (index) {
+	if (index.$ === 'Just') {
+		var i = index.a;
+		return A2($elm$core$Array$get, i, $author$project$Farben$itemLists);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $elm$core$Array$isEmpty = function (_v0) {
+	var len = _v0.a;
+	return !len;
+};
+var $author$project$Farben$initialItemListIndex = $elm$core$Array$isEmpty($author$project$Farben$itemLists) ? $elm$core$Maybe$Nothing : $elm$core$Maybe$Just(0);
+var $author$project$Farben$initialModel = {
+	factor: 0.95,
+	inputFactor: '0.95',
+	inputInterval: '1500',
+	interval: 1500,
+	item: $elm$core$Maybe$Nothing,
+	itemList: $author$project$Farben$getItemList($author$project$Farben$initialItemListIndex),
+	itemListIndex: $author$project$Farben$initialItemListIndex
+};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Farben$init = function (_v0) {
@@ -5155,7 +5312,7 @@ var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $author$project$Farben$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$none;
 };
-var $author$project$Farben$Next = {$: 'Next'};
+var $author$project$Farben$NextItem = {$: 'NextItem'};
 var $elm$core$Basics$always = F2(
 	function (a, _v0) {
 		return a;
@@ -5168,10 +5325,49 @@ var $author$project$Utils$after = F2(
 			$elm$core$Basics$always(msg),
 			$elm$core$Process$sleep(time));
 	});
+var $elm$core$Maybe$andThen = F2(
+	function (callback, maybeValue) {
+		if (maybeValue.$ === 'Just') {
+			var value = maybeValue.a;
+			return callback(value);
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
 var $elm$core$String$fromFloat = _String_fromNumber;
-var $author$project$Farben$nextCmd = function (model) {
-	return A2($author$project$Utils$after, model.interval, $author$project$Farben$Next);
+var $elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return $elm$core$Maybe$Just(x);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
 };
+var $author$project$Farben$nextCmd = function (model) {
+	return A2($author$project$Utils$after, model.interval, $author$project$Farben$NextItem);
+};
+var $author$project$Farben$resetModel = F2(
+	function (itemListIndex, model) {
+		return _Utils_update(
+			model,
+			{
+				item: $elm$core$Maybe$Nothing,
+				itemList: $author$project$Farben$getItemList(itemListIndex),
+				itemListIndex: itemListIndex
+			});
+	});
+var $elm$core$Debug$log = _Debug_log;
+var $elm$core$Debug$toString = _Debug_toString;
+var $author$project$Farben$spy = F2(
+	function (info, thing) {
+		return A2(
+			$elm$core$Debug$log,
+			_Utils_ap(
+				info,
+				$elm$core$Debug$toString(thing)),
+			thing);
+	});
 var $elm$core$String$toFloat = _String_toFloat;
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
@@ -5187,39 +5383,53 @@ var $author$project$Farben$update = F2(
 		switch (msg.$) {
 			case 'Start':
 				var interval = A2(
-					$elm$core$Maybe$withDefault,
-					model.interval,
-					$elm$core$String$toInt(model.inputInterval));
+					$author$project$Farben$spy,
+					'INTERVAL:',
+					A2(
+						$elm$core$Maybe$withDefault,
+						model.interval,
+						$elm$core$String$toInt(model.inputInterval)));
 				var factor = A2(
-					$elm$core$Maybe$withDefault,
-					model.factor,
-					$elm$core$String$toFloat(model.inputFactor));
+					$author$project$Farben$spy,
+					'FACTOR:',
+					A2(
+						$elm$core$Maybe$withDefault,
+						model.factor,
+						$elm$core$String$toFloat(model.inputFactor)));
 				return _Utils_Tuple2(
-					_Utils_update(
-						$author$project$Farben$initialModel,
-						{
-							factor: factor,
-							inputFactor: $elm$core$String$fromFloat(factor),
-							inputInterval: $elm$core$String$fromInt(interval),
-							interval: interval
-						}),
-					A2($author$project$Utils$after, 500, $author$project$Farben$Next));
-			case 'Next':
-				var _v1 = model.items;
-				if (!_v1.b) {
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				} else {
-					var item = _v1.a;
-					var rest = _v1.b;
+					A2(
+						$author$project$Farben$resetModel,
+						model.itemListIndex,
+						_Utils_update(
+							model,
+							{
+								factor: factor,
+								inputFactor: $elm$core$String$fromFloat(factor),
+								inputInterval: $elm$core$String$fromInt(interval),
+								interval: interval,
+								item: A2(
+									$elm$core$Maybe$andThen,
+									$elm$core$List$head,
+									$author$project$Farben$getItemList(model.itemListIndex))
+							})),
+					A2($author$project$Utils$after, 500, $author$project$Farben$NextItem));
+			case 'NextItem':
+				var _v1 = model.itemList;
+				if ((_v1.$ === 'Just') && _v1.a.b) {
+					var _v2 = _v1.a;
+					var item = _v2.a;
+					var rest = _v2.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
 								interval: $elm$core$Basics$ceiling(model.interval * model.factor),
 								item: $elm$core$Maybe$Just(item),
-								items: rest
+								itemList: $elm$core$Maybe$Just(rest)
 							}),
 						$author$project$Farben$nextCmd(model));
+				} else {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
 			case 'SetInputFactor':
 				var val = msg.a;
@@ -5228,23 +5438,23 @@ var $author$project$Farben$update = F2(
 						model,
 						{inputFactor: val}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'SetInputInterval':
 				var val = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{inputInterval: val}),
 					$elm$core$Platform$Cmd$none);
+			default:
+				var val = msg.a;
+				return _Utils_Tuple2(
+					A2(
+						$author$project$Farben$resetModel,
+						$elm$core$String$toInt(val),
+						model),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
-var $author$project$Farben$SetInputFactor = function (a) {
-	return {$: 'SetInputFactor', a: a};
-};
-var $author$project$Farben$SetInputInterval = function (a) {
-	return {$: 'SetInputInterval', a: a};
-};
-var $author$project$Farben$Start = {$: 'Start'};
-var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5256,7 +5466,53 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Farben$SetInputFactor = function (a) {
+	return {$: 'SetInputFactor', a: a};
+};
+var $author$project$Farben$SetInputInterval = function (a) {
+	return {$: 'SetInputInterval', a: a};
+};
+var $author$project$Farben$SetItemList = function (a) {
+	return {$: 'SetItemList', a: a};
+};
+var $author$project$Farben$Start = {$: 'Start'};
+var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$html$Html$option = _VirtualDom_node('option');
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$selected = $elm$html$Html$Attributes$boolProperty('selected');
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $author$project$Farben$intToOption = F2(
+	function (selectedIndex, i) {
+		return A2(
+			$elm$html$Html$option,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$value(
+					$elm$core$String$fromInt(i)),
+					$elm$html$Html$Attributes$selected(
+					_Utils_eq(i, selectedIndex))
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text(
+					$elm$core$String$fromInt(i + 1))
+				]));
+	});
+var $elm$core$Array$length = function (_v0) {
+	var len = _v0.a;
+	return len;
+};
+var $author$project$Farben$nItemLists = $elm$core$Array$length($author$project$Farben$itemLists);
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -5307,11 +5563,9 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 			$elm$html$Html$Events$alwaysStop,
 			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
 };
+var $elm$html$Html$select = _VirtualDom_node('select');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Farben$viewItem = function (item) {
 	if (item.$ === 'Nothing') {
 		return $elm$html$Html$text('');
@@ -5337,6 +5591,127 @@ var $author$project$Farben$viewItem = function (item) {
 				]));
 	}
 };
+var $author$project$Farben$viewBody = F2(
+	function (model, index) {
+		return A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row mt-5')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									A2($elm$html$Html$Attributes$style, 'width', '100px')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Faktor:')
+								])),
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onInput($author$project$Farben$SetInputFactor),
+									$elm$html$Html$Attributes$value(model.inputFactor)
+								]),
+							_List_Nil)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row mt-2')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									A2($elm$html$Html$Attributes$style, 'width', '100px')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Intervall:')
+								])),
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onInput($author$project$Farben$SetInputInterval),
+									$elm$html$Html$Attributes$value(model.inputInterval)
+								]),
+							_List_Nil)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row mt-2')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									A2($elm$html$Html$Attributes$style, 'width', '100px')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Liste:')
+								])),
+							A2(
+							$elm$html$Html$select,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onInput($author$project$Farben$SetItemList)
+								]),
+							A2(
+								$elm$core$List$map,
+								$author$project$Farben$intToOption(index),
+								A2($elm$core$List$range, 0, $author$project$Farben$nItemLists - 1)))
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row mt-5')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onClick($author$project$Farben$Start)
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Start')
+								]))
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row mt-5')
+						]),
+					_List_fromArray(
+						[
+							$author$project$Farben$viewItem(model.item)
+						]))
+				]));
+	});
 var $author$project$Farben$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -5353,89 +5728,21 @@ var $author$project$Farben$view = function (model) {
 					[
 						$elm$html$Html$text('Welche Farbe hat das Wort ?')
 					])),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('row mt-5')
-					]),
-				_List_fromArray(
-					[
-						A2(
+				function () {
+				var _v0 = model.itemListIndex;
+				if (_v0.$ === 'Just') {
+					var i = _v0.a;
+					return A2($author$project$Farben$viewBody, model, i);
+				} else {
+					return A2(
 						$elm$html$Html$div,
+						_List_Nil,
 						_List_fromArray(
 							[
-								A2($elm$html$Html$Attributes$style, 'width', '100px')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Faktor:')
-							])),
-						A2(
-						$elm$html$Html$input,
-						_List_fromArray(
-							[
-								$elm$html$Html$Events$onInput($author$project$Farben$SetInputFactor),
-								$elm$html$Html$Attributes$value(model.inputFactor)
-							]),
-						_List_Nil)
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('row mt-5')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								A2($elm$html$Html$Attributes$style, 'width', '100px')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Intervall:')
-							])),
-						A2(
-						$elm$html$Html$input,
-						_List_fromArray(
-							[
-								$elm$html$Html$Events$onInput($author$project$Farben$SetInputInterval),
-								$elm$html$Html$Attributes$value(model.inputInterval)
-							]),
-						_List_Nil)
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('row mt-5')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Events$onClick($author$project$Farben$Start)
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Start')
-							]))
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('row mt-5')
-					]),
-				_List_fromArray(
-					[
-						$author$project$Farben$viewItem(model.item)
-					]))
+								$elm$html$Html$text('Keine Daten')
+							]));
+				}
+			}()
 			]));
 };
 var $author$project$Farben$main = $elm$browser$Browser$element(
