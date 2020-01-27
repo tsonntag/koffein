@@ -119,7 +119,8 @@ update msg model =
                     )
 
                 _ ->
-                    ( model, Cmd.none )
+                    ( resetModel model.itemListIndex model
+                    , Cmd.none )
 
 
         SetInputFactor val ->
@@ -238,18 +239,21 @@ viewBody model list index =
             ]
         , div [ class "row mt-3" ]
             [ div    [ style "width" "100px"] [ text "Liste:"]
+
             , select [ onInput SetItemList ]
                 (List.map (intToOption index) (List.range 0 (nItemLists - 1)))
+
             , button [ onClick (SetPage PrintOne)
                      , class "ml-3"]
-                  [ text "Zeige Liste" ]
+                     [ text "Zeige Liste" ]
+
             , button [ onClick (SetPage PrintAll)
                      , class "ml-3"]
-                  [ text "Zeige alle Listen" ]
+                     [ text "Zeige alle Listen" ]
             ]
         , div [ class "row mt-2" ]
             [ div [ style "width" "100px"] [ text "Farben:"]
-            , div [] [ text (list |> List.length |> String.fromInt)]
+            , div [] [ text (Just index |> getItemList |> (Maybe.withDefault []) |> List.length |> String.fromInt)]
             ]
 
         , div [ class "row mt-4" ]
